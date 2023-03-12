@@ -7,19 +7,19 @@ void Game::initVariables()
 
     // Game logic
     this->points = 0;
-    this->enemySpawnTimerMax = 1000.f;
+    this->enemySpawnTimerMax = 165.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
-    this->maxEnemies = 5;
+    this->maxEnemies = 10;
 }
 
 void Game::initWindow()
 {
-    this->videoMode.width = 1980;
-    this->videoMode.height = 1024;
+    this->videoMode.width = 1920;
+    this->videoMode.height = 1080;
     // this->videoMode.getDesktopMode;
-    this->window = new sf::RenderWindow(this->videoMode, "Pac - Man", sf::Style::Titlebar | sf::Style::Close);
+    this->window = new sf::RenderWindow(this->videoMode, "Click - me!", sf::Style::Titlebar | sf::Style::Close);
 
-    this->window->setFramerateLimit(60);
+    this->window->setFramerateLimit(165);
 }
 
 void Game::initEnemies()
@@ -28,10 +28,8 @@ void Game::initEnemies()
     this->enemy.setSize(sf::Vector2f(100.f, 100.f));
     this->enemy.setScale(sf::Vector2f(0.5f, 0.5f));
     this->enemy.setFillColor(sf::Color::Cyan);
-    this->enemy.setOutlineColor(sf::Color::Green);
-    this->enemy.setOutlineThickness(1.f);
-
-
+    // this->enemy.setOutlineColor(sf::Color::Green);
+    // this->enemy.setOutlineThickness(1.f);
 }
 
 // Constructors / Destructors
@@ -68,8 +66,7 @@ void Game::spawnEnemy()
 
    this->enemy.setPosition(
         static_cast<float>(rand() % static_cast<int>(this->window->getSize().x - this->enemy.getSize().x)),
-        0
-        // static_cast<float>(rand() % static_cast<int>(this->window->getSize().y - this->enemy.getSize().y))
+        static_cast<float>(rand() % static_cast<int>(this->window->getSize().y - this->enemy.getSize().y - 1080))
    );
 
    this->enemy.setFillColor(sf::Color::Green);
@@ -106,6 +103,7 @@ void Game::updateMousePositions()
     */
 
    this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+   this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
 }
 
 void Game::updateEnemies()
@@ -133,9 +131,33 @@ void Game::updateEnemies()
     }
 
     // Move the enemies
-    for (auto &e : this->enemies)
+    for (int i = 0; i < this->enemies.size(); i++)
     {
-        e.move(0.f, 1.f);
+        bool deleted = false;
+
+        this->enemies[i].move(0.f, 3.f);
+
+        // Check if clicked upon
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            if (this->enemies[i].getGlobalBounds().contains(this->mousePosView))
+            {
+                deleted = true;
+
+                // Gain points
+                this->points += 10.f;
+            }
+        }
+
+        // If the enemy is past the bottom of the screen
+        if (this->enemies[i].getPosition().y > this->window->getSize().y)
+        {
+            deleted = true;
+        }
+
+        // Final delete
+        if(deleted)
+            this->enemies.erase(this->enemies.begin() + i);
     }
 }
 
