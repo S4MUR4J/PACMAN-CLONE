@@ -3,15 +3,15 @@
 
 int main()
 {
+    // Initialize srand
+    std::srand(static_cast<unsigned>(time(NULL)));
+
     //Init Game Engine
     Game game;
 
     // Loop in which one game must go on
-    while(game.getWindowIsOpen())
+    while(game.getWindowIsOpen() && !game.getEndGame())
     {
-        // Initialize srand
-        std::srand(static_cast<unsigned>(time(NULL)));
-
         // Update
         game.update();
         
