@@ -54,5 +54,6 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "sstream": "cpp"
-    }
+    },
+    "explorer.sortOrder": "type"
 }
