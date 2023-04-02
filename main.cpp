@@ -2,9 +2,11 @@
 #include "Headers/Game.h"
 
 int main() {
+    srand(static_cast<unsigned>(time(0)));
+
     Game game;
 
-    while(game.getWindowIsOpen() && !game.getEndGame())
+    while(game.executing())
     {
         game.update();
         game.render();

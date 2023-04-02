@@ -1,8 +1,11 @@
 #include "Headers/Game.h"
 
 void Game::initVariables() {
-    this->window = nullptr;
     this->endGame = false;
+    this->spawnTimerMax = 10.f;
+    this->spawnTimer = this->spawnTimerMax;
+    this->maxFruits = 10;
+    this->points = 0;
 }
 
 void Game::initWindow() {
@@ -22,12 +25,12 @@ Game::~Game() {
     delete this->window;
 }
 
-const bool Game::getWindowIsOpen() const {
-    return this->window->isOpen();
-}
-
 const bool Game::getEndGame() const {
     return this->endGame;
+}
+
+const bool Game::executing() const {
+    return this->window->isOpen() && this->endGame == false;
 }
 
 void Game::pollEvents() {
@@ -46,16 +49,47 @@ void Game::pollEvents() {
     }
 }
 
+void Game::spawnFruits() {
+    if (this->spawnTimer < this->maxFruits) {
+        this->spawnTimer += 1.f;
+    }
+    else
+    {
+        if (this->fruits.size() < this->maxFruits)
+        {
+            this->fruits.push_back(Fruit(*this->window));
+            this->spawnTimer = 0.f;
+        }
+    }
+}
+
+void Game::updateCollision() {
+    for (size_t i = 0; i < this->fruits.size(); i++) {
+        if (this->pacman.getShape().getGlobalBounds().intersects(this->fruits[i].getShape().getGlobalBounds())) {
+            this->points++;
+            this->fruits.erase(this->fruits.begin() + i);
+        }
+    }
+}
+
 void Game::update() {
     this->pollEvents();
-    this->pacman.update(this->window);
-    this->fruit.update();
+
+    if (this->endGame == false) {
+        this->spawnFruits();
+        this->pacman.update(this->window);
+        this->updateCollision();
+    }
 }
 
 void Game::render() {
     this->window->clear();
     this->pacman.render(this->window);
-    this->fruit.render(*this->window);
+
+    for (auto i : this->fruits) {        
+        i.render(*this->window);
+    }
+
     this->window->display();
 }
 

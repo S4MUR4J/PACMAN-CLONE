@@ -10,9 +10,9 @@ class Fruit {
 private:
     sf::CircleShape shape;
 
-    void initShape();
+    void initShape(const sf::RenderWindow& window);
 public:
-    Fruit(float x = 1000.f, float y = 1000.f);
+    Fruit(const sf::RenderWindow& window);
     virtual ~Fruit();
 
     const sf::CircleShape getShape() const;

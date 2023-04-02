@@ -28,6 +28,8 @@ public:
     Pacman(float x = 0.f, float y = 0.f);
     virtual ~Pacman();
 
+    const sf::CircleShape& getShape() const;
+
     void railMoveHelper();
     void updateInput();
     void updateWindowBoundsCollision(const sf::RenderTarget* target);

@@ -7,6 +7,8 @@ void Pacman::initVariables() {
 
 void Pacman::initShapes() {
     this->shape.setFillColor(sf::Color::Cyan);
+    this->shape.setOutlineThickness(0.1f);
+    this->shape.setOutlineColor(sf::Color::Green);
     this->shape.setRadius(35.f);
 }
 
@@ -18,6 +20,10 @@ Pacman::Pacman(float x, float y) {
 
 Pacman::~Pacman() {
     
+}
+
+const sf::CircleShape & Pacman::getShape() const {
+    return this->shape;
 }
 
 void Pacman::railMoveHelper() {
@@ -82,12 +88,12 @@ void Pacman::updateWindowBoundsCollision(const sf::RenderTarget *target) {
     }
 }
 
-void Pacman::update(const sf::RenderTarget *target) {
+void Pacman::update(const sf::RenderTarget * target) {
     this->railMoveHelper();
     this->updateInput();
     this->updateWindowBoundsCollision(target);
 }
 
-void Pacman::render(sf::RenderTarget *target) {
+void Pacman::render(sf::RenderTarget * target) {
     target->draw(this->shape);
 }

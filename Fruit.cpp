@@ -1,13 +1,20 @@
 #include "Headers\Fruit.h"
 
-void Fruit::initShape() {
+void Fruit::initShape(const sf::RenderWindow& window) {
     this->shape.setFillColor(sf::Color::Yellow);
+    this->shape.setOutlineThickness(0.1f);
+    this->shape.setOutlineColor(sf::Color::Green);
     this->shape.setRadius(10.f);
+    this->shape.setPosition(
+        sf::Vector2f(
+            static_cast<float>(rand() % window.getSize().x - this->shape.getGlobalBounds().width), 
+			static_cast<float>(rand() % window.getSize().y - this->shape.getGlobalBounds().height)
+        )
+    );
 }
 
-Fruit::Fruit(float x, float y) {
-    this->shape.setPosition(x, y);
-    this->initShape();
+Fruit::Fruit(const sf::RenderWindow& window) {
+    this->initShape(window);
 }
 
 Fruit::~Fruit() {
@@ -15,7 +22,7 @@ Fruit::~Fruit() {
 }
 
 const sf::CircleShape Fruit::getShape() const {
-    return sf::CircleShape();
+    return this->shape;
 }
 
 void Fruit::update() {
