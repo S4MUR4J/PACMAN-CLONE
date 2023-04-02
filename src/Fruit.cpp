@@ -1,4 +1,4 @@
-#include "Headers\Fruit.h"
+#include "Fruit.h"
 
 void Fruit::initShape(const sf::RenderWindow& window) {
     this->shape.setFillColor(sf::Color::Yellow);

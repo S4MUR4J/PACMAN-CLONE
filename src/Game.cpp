@@ -1,4 +1,4 @@
-#include "Headers/Game.h"
+#include "Game.h"
 
 void Game::initVariables() {
     this->endGame = false;
@@ -11,8 +11,7 @@ void Game::initVariables() {
 void Game::initWindow() {
     this->videoMode.width = 1920;
     this->videoMode.height = 1080;
-    this->window = new sf::RenderWindow(this->videoMode,
-       "Pac-Man", sf::Style::Titlebar | sf::Style::Close);
+    this->window = new sf::RenderWindow(this->videoMode, "Pac-Man", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(165);
 }
 

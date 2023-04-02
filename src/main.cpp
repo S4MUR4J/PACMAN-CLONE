@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Headers/Game.h"
+#include "Game.h"
 
 int main() {
     srand(static_cast<unsigned>(time(0)));

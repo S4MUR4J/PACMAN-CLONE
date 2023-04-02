@@ -32,3 +32,6 @@
 *.app
 
 Other/
+cmake_modules/
+cmake-build-debug/
+build/

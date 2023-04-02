@@ -1,4 +1,4 @@
-#include "Headers/Pacman.h"
+#include "Pacman.h"
 
 void Pacman::initVariables() {
     this->movementSpeed = 10.f;

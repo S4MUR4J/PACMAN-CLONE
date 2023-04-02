@@ -1,4 +1,4 @@
-#include "Headers/MapConventer.h"
+#include "MapConventer.h"
 
 std::array<std::array<Cell, mapHeight>, mapWidth> convert_sketch(const std::array<std::string, mapHeight> &i_map_sketch)
 {
