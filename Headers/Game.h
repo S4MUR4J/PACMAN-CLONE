@@ -7,6 +7,9 @@
 
 #include "Pacman.h"
 #include "Fruit.h"
+#include "MapConventer.h"
+#include "TerrainRenderer.h"
+#include <array>
 
 class Game
 {

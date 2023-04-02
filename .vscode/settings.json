@@ -53,7 +53,8 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "array": "cpp"
     },
     "explorer.sortOrder": "type"
 }
