@@ -1,10 +1,10 @@
 #include "Fruit.h"
 
 void Fruit::initShape(const sf::RenderWindow& window) {
-    this->shape.setFillColor(sf::Color::Yellow);
-    this->shape.setOutlineThickness(0.1f);
-    this->shape.setOutlineColor(sf::Color::Green);
-    this->shape.setRadius(10.f);
+    this->shape.setFillColor(sf::Color::White);
+    this->shape.setOutlineThickness(0.5f);
+    this->shape.setOutlineColor(sf::Color::Black);
+    this->shape.setRadius(8.f);
     this->shape.setPosition(
         sf::Vector2f(
             static_cast<float>(rand() % window.getSize().x - this->shape.getGlobalBounds().width), 

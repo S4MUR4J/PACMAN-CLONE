@@ -4,7 +4,7 @@ void Map::initShape()
 {
     this->texture.loadFromFile("./assets/map.png");
     this->sprite.setTexture(texture);
-    sprite.setColor(sf::Color::Magenta);
+    sprite.setColor(sf::Color::Cyan);
 }
 
 Map::Map()

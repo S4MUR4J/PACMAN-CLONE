@@ -1,15 +1,13 @@
 #include "Pacman.h"
 
 void Pacman::initVariables() {
-    this->movementSpeed = 10.f;
+    this->movementSpeed = 4.f;
     this->moveDirection = STOP;
 }
 
 void Pacman::initShapes() {
-    this->shape.setFillColor(sf::Color::Cyan);
-    this->shape.setOutlineThickness(0.1f);
-    this->shape.setOutlineColor(sf::Color::Green);
-    this->shape.setRadius(35.f);
+    this->shape.setFillColor(sf::Color::Yellow);
+    this->shape.setRadius(16.f);
 }
 
 Pacman::Pacman(float x, float y) {
@@ -26,71 +24,80 @@ const sf::CircleShape & Pacman::getShape() const {
     return this->shape;
 }
 
-void Pacman::railMoveHelper() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) // Left
+void Pacman::wallCollision()
+{
+    this->currentX = static_cast<int>(round((this->shape.getPosition().x + this->shape.getRadius() / 2) / cellSize));
+    this->currentY = static_cast<int>(round((this->shape.getPosition().y + this->shape.getRadius() / 2)/ cellSize));
+
+    if(this->map[this->currentX][this->currentY] == 1) {
+        this->shape.setPosition(currentX * cellSize + this->shape.getRadius(), currentY * cellSize + this->shape.getRadius());
+        this->moveDirection = STOP;
+    } 
+}
+
+void Pacman::railMoveHelper()
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) // Left
     {
         this->moveDirection = LEFT;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) // Right
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) // Right
     {
         this->moveDirection = RIGHT;
     }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) // Down
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) // Down
     {
         this->moveDirection = BOTTOM;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) // Up
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) // Up
     {
         this->moveDirection = TOP;
     }
 }
 
 void Pacman::updateInput() {
-    if (this->moveDirection == STOP) {
+    this->currentX = static_cast<int>(round(this->shape.getPosition().x / cellSize));
+    this->currentY = static_cast<int>(round(this->shape.getPosition().y / cellSize));
+
+    if (map[currentY][currentX] == 1)
+    {
+        this->shape.setPosition(this->lastX * cellSize + this->shape.getRadius()/2, this->lastY * cellSize + this->shape.getRadius()/2);
+        this->moveDirection = STOP;
         return;
     }
-    if (this->moveDirection == LEFT) {
-        this->shape.move(-this->movementSpeed, 0.f);
+
+    this->lastX = this->currentX;
+    this->lastY = this->currentY;
+
+    if (this->moveDirection == LEFT && map[currentY][currentX--] != 1) {
+        this->shape.move(-(cellSize / 48.f), 0);
     }
-    if (this->moveDirection == RIGHT) {
-        this->shape.move(this->movementSpeed, 0.f);
+    if (this->moveDirection == RIGHT && map[currentY][currentX++] != 1) {
+        this->shape.move(cellSize / 48.f, 0);
     }
-    if (this->moveDirection == BOTTOM) {
-        this->shape.move(0.f, this->movementSpeed);
+    if (this->moveDirection == BOTTOM && map[currentY++][currentX] != 1) {
+        this->shape.move(0, cellSize / 48.f);
     }
-    if (this->moveDirection == TOP) {
-        this->shape.move(0.f, -this->movementSpeed);
+    if (this->moveDirection == TOP && map[currentY--][currentX] != 1) {
+        this->shape.move(0, -(cellSize / 48.f));
     }
 }
 
-void Pacman::updateWindowBoundsCollision(const sf::RenderTarget *target) {
-    //Left
-    if (this->shape.getGlobalBounds().left <= 0.f) {
-        this->shape.setPosition(0.1f, this->shape.getGlobalBounds().top);
-        this->moveDirection = STOP;
+void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
+    if (this->shape.getGlobalBounds().left <= 0.f) {   
+        this->shape.setPosition(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top); 
     }
-    //Right
     if (this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x + 0.1f) {
-        this->shape.setPosition(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top);
-        this->moveDirection = STOP;
-    }
-    //Top
-    if (this->shape.getGlobalBounds().top <= -0.1f) {
-        this->shape.setPosition(this->shape.getGlobalBounds().left, 0.1f);
-        this->moveDirection = STOP;
-    }
-    //Bottom
-    if (this->shape.getGlobalBounds().top + this->shape.getGlobalBounds().height >= target->getSize().y) {
-        this->shape.setPosition(this->shape.getGlobalBounds().left, target->getSize().y - this->shape.getGlobalBounds().height);
-        this->moveDirection = STOP;
+        this->shape.setPosition(0.1f, this->shape.getGlobalBounds().top);
     }
 }
 
 void Pacman::update(const sf::RenderTarget * target) {
+    std::cout << "Pos X: " << this->shape.getPosition().x << "Pos Y: " << this->shape.getPosition().y << std::endl;
     this->railMoveHelper();
+    //this->wallCollision();
     this->updateInput();
-    this->updateWindowBoundsCollision(target);
+    this->updateTeleportOnEdge(target);
 }
 
 void Pacman::render(sf::RenderTarget * target) {

@@ -39,7 +39,6 @@ public:
     const bool executing() const;
     void pollEvents();
 
-    void generateMap();
     void spawnFruits();
     void updateCollision();
     
