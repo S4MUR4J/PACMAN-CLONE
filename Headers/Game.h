@@ -7,8 +7,7 @@
 
 #include "Pacman.h"
 #include "Fruit.h"
-#include "MapConventer.h"
-#include "TerrainRenderer.h"
+#include "Map.h"
 #include <array>
 
 class Game
@@ -21,6 +20,7 @@ private:
     bool endGame;
 
     Pacman pacman;
+    Map map;
 
     int points;
 
@@ -39,6 +39,7 @@ public:
     const bool executing() const;
     void pollEvents();
 
+    void generateMap();
     void spawnFruits();
     void updateCollision();
     

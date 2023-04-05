@@ -6,15 +6,15 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(Pacman 
     src/main.cpp 
     src/Game.cpp 
-    headers/Game.hpp
     src/Pacman.cpp 
-    src/Fruit.cpp 
-    src/TerrainRenderer.cpp 
-    headers/Pacman.hpp 
-    src/MapConventer.cpp 
-    headers/TerrainRenderer.hpp 
-    headers/Fruit.hpp
-    headers/MapConventer.hpp)
+    src/Fruit.cpp
+    src/Map.cpp
+
+    headers/Game.h
+    headers/Pacman.h
+    headers/Fruit.h
+    headers/Constants.h
+    headers/Map.h)
 
 include_directories(headers /usr/include c:/SFML/include)
 

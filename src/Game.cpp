@@ -9,8 +9,8 @@ void Game::initVariables() {
 }
 
 void Game::initWindow() {
-    this->videoMode.width = 1920;
-    this->videoMode.height = 1080;
+    this->videoMode.width = mapWidth * cellSize;
+    this->videoMode.height = mapHeight * cellSize;
     this->window = new sf::RenderWindow(this->videoMode, "Pac-Man", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(165);
 }
@@ -82,35 +82,9 @@ void Game::update() {
 }
 
 void Game::render() {
-    this->window->clear();  
+    this->window->clear();
 
-    std::array<std::string, mapHeight> mapBuilder = {
-        " ################### ",
-        " #........#........# ",
-        " #o##.###.#.###.##o# ",
-        " #.................# ",
-        " #.##.#.#####.#.##.# ",
-        " #....#...#...#....# ",
-        " ####.### # ###.#### ",
-        "    #.#   0   #.#    ",
-        "#####.# ##=## #.#####",
-        "     .  #123#  .     ",
-        "#####.# ##### #.#####",
-        "    #.#       #.#    ",
-        " ####.# ##### #.#### ",
-        " #........#........# ",
-        " #.##.###.#.###.##.# ",
-        " #o.#.....P.....#.o# ",
-        " ##.#.#.#####.#.#.## ",
-        " #....#...#...#....# ",
-        " #.######.#.######.# ",
-        " #.................# ",
-        " ################### "
-    };
-
-    std::array<std::array<Cell, mapHeight>, mapWidth> map = convert_sketch(mapBuilder);
-    draw_map(map, *this->window);
-
+    this->map.render(*this->window);
     this->pacman.render(this->window);
 
     for (auto i : this->fruits) {        

@@ -48,7 +48,6 @@ void Pacman::railMoveHelper() {
 
 void Pacman::updateInput() {
     if (this->moveDirection == STOP) {
-        std::cout << "STOP" << std::endl;
         return;
     }
     if (this->moveDirection == LEFT) {
@@ -77,7 +76,7 @@ void Pacman::updateWindowBoundsCollision(const sf::RenderTarget *target) {
         this->moveDirection = STOP;
     }
     //Top
-    if (this->shape.getGlobalBounds().top <= 0.f) {
+    if (this->shape.getGlobalBounds().top <= -0.1f) {
         this->shape.setPosition(this->shape.getGlobalBounds().left, 0.1f);
         this->moveDirection = STOP;
     }

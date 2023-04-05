@@ -1,8 +1,8 @@
 #pragma once
 
-constexpr unsigned char cellSize = 16;
-constexpr unsigned char mapHeight = 21;
-constexpr unsigned char mapWidth = 21;
+constexpr int mapHeight = 21;
+constexpr int mapWidth = 21;
+constexpr float cellSize = 48.f;
 
 enum Cell
 {
