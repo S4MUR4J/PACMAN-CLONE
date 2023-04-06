@@ -1,20 +1,15 @@
 #include "Fruit.h"
 
-void Fruit::initShape(const sf::RenderWindow& window) {
+void Fruit::initShape(const sf::RenderWindow& window, float x, float y) {
     this->shape.setFillColor(sf::Color::White);
     this->shape.setOutlineThickness(0.5f);
     this->shape.setOutlineColor(sf::Color::Black);
     this->shape.setRadius(8.f);
-    this->shape.setPosition(
-        sf::Vector2f(
-            static_cast<float>(rand() % window.getSize().x - this->shape.getGlobalBounds().width), 
-			static_cast<float>(rand() % window.getSize().y - this->shape.getGlobalBounds().height)
-        )
-    );
+    this->shape.setPosition(sf::Vector2f(x, y));
 }
 
-Fruit::Fruit(const sf::RenderWindow& window) {
-    this->initShape(window);
+Fruit::Fruit(const sf::RenderWindow& window, float x, float y) {
+    this->initShape(window, x, y);
 }
 
 Fruit::~Fruit() {

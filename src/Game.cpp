@@ -2,10 +2,17 @@
 
 void Game::initVariables() {
     this->endGame = false;
-    this->spawnTimerMax = 10.f;
-    this->spawnTimer = this->spawnTimerMax;
     this->maxFruits = 10;
     this->points = 0;
+}
+
+void Game::initFruits() {
+    for(int i = 0; i < mapHeight; i++) {
+        for(int j = 0; j < mapWidth; j++) {
+            if (sketch[j][i] == 0)
+            this->fruits.push_back(Fruit(*this->window, i * cellSize + 16.f, j * cellSize + 16.f));
+        }
+    }
 }
 
 void Game::initWindow() {
@@ -15,8 +22,16 @@ void Game::initWindow() {
     this->window->setFramerateLimit(165);
 }
 
+void Game::manageEndGame()
+{
+    if(this->fruits.empty()) {
+        this->endGame = true;
+    }
+}
+
 Game::Game() {
     this->initVariables();
+    this->initFruits();
     this->initWindow();
 }
 
@@ -48,25 +63,12 @@ void Game::pollEvents() {
     }
 }
 
-void Game::spawnFruits() {
-    if (this->spawnTimer < this->maxFruits) {
-        this->spawnTimer += 1.f;
-    }
-    else
-    {
-        if (this->fruits.size() < this->maxFruits)
-        {
-            this->fruits.push_back(Fruit(*this->window));
-            this->spawnTimer = 0.f;
-        }
-    }
-}
-
 void Game::updateCollision() {
     for (size_t i = 0; i < this->fruits.size(); i++) {
         if (this->pacman.getShape().getGlobalBounds().intersects(this->fruits[i].getShape().getGlobalBounds())) {
             this->points++;
             this->fruits.erase(this->fruits.begin() + i);
+            std::cout << "Dziala" << std::endl;
         }
     }
 }
@@ -75,9 +77,9 @@ void Game::update() {
     this->pollEvents();
 
     if (this->endGame == false) {
-        this->spawnFruits();
         this->pacman.update(this->window);
         this->updateCollision();
+        this->manageEndGame();
     }
 }
 

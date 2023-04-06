@@ -75,22 +75,22 @@ void Pacman::updateInput() {
     if (this->moveDirection == LEFT) {
         this->nextPosX = this->currentX -1;
         if(map[nextPosY][nextPosX] != 1)
-            this->shape.move(-(cellSize / 48.f), 0);
+            this->shape.move(-this->movementSpeed, 0);
     }
     if (this->moveDirection == RIGHT) {
         this->nextPosX = this->currentX + 1;
         if(map[nextPosY][nextPosX] != 1)
-            this->shape.move(cellSize / 48.f, 0);
+            this->shape.move(this->movementSpeed, 0);
     }
     if (this->moveDirection == BOTTOM) {
         this->nextPosY = this->currentY + 1;
         if(map[nextPosY][nextPosX] != 1)
-            this->shape.move(0, cellSize / 48.f);
+            this->shape.move(0, this->movementSpeed);
     }
     if (this->moveDirection == TOP) {
         this->nextPosY = this->currentY - 1;
         if(map[nextPosY][nextPosX] != 1)
-            this->shape.move(0, -(cellSize / 48.f));
+            this->shape.move(0, -this->movementSpeed);
     }    
 }
 
@@ -104,7 +104,7 @@ void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
 }
 
 void Pacman::update(const sf::RenderTarget * target) {
-    std::cout << "Pos X: " << this->shape.getPosition().x << "Pos Y: " << this->shape.getPosition().y << std::endl;
+    //std::cout << "Pos X: " << this->shape.getPosition().x << "Pos Y: " << this->shape.getPosition().y << std::endl;
     this->railMoveHelper();
     this->updateInput();
     this->updateTeleportOnEdge(target);

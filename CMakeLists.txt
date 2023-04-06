@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(Pacman 
     src/main.cpp 
     src/Game.cpp 
-    src/Pacman.cpp 
+    src/Pacman.cpp
     src/Fruit.cpp
     src/Map.cpp
 
