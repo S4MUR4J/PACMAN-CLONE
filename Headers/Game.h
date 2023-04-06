@@ -35,7 +35,7 @@ private:
         {4, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 4},
         {4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4},
         {4, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 4},
-        {4, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 4},
+        {4, 1, 0, 0, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 1, 4},
         {4, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 4},
         {4, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 4},
         {4, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 4},
@@ -44,16 +44,17 @@ private:
     };
 
     Pacman pacman;
-    Map map;
 
     int points;
 
     std::vector<Fruit> fruits;
+    std::vector<Map> mapTiles;
     float spawnTimerMax;
     float spawnTimer;
     int maxFruits;
 
     void initVariables();
+    void initMapTiles();
     void initFruits();
     void initWindow();
     void manageEndGame();

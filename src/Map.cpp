@@ -1,15 +1,15 @@
 #include "Map.h"
 
-void Map::initShape()
+void Map::initShape(float x, float y)
 {
-    this->texture.loadFromFile("./assets/map.png");
-    this->sprite.setTexture(texture);
-    sprite.setColor(sf::Color::Cyan);
+    this->shape.setSize(sf::Vector2f(cellSize, cellSize));
+    this->shape.setFillColor(sf::Color::Blue);
+    this->shape.setPosition(x, y);
 }
 
-Map::Map()
+Map::Map(const sf::RenderWindow& window, float x, float y)
 {
-    this->initShape();
+    this->initShape(x, y);
 }
 
 Map::~Map()
@@ -19,13 +19,5 @@ Map::~Map()
 
 void Map::render(sf::RenderWindow & target)
 {
-    for(int i = 0; i < mapHeight; i++) {
-        for(int j = 0; j < mapWidth; j++) {
-            this->sprite.setPosition(static_cast<float>(cellSize * i), static_cast<float>(cellSize * j));
-            if (map[j][i] == 1) {
-                this->sprite.setTextureRect(sf::IntRect(cellSize, cellSize, cellSize, cellSize));
-                target.draw(this->sprite);
-            }
-        }
-    }
+    target.draw(this->shape);         
 }

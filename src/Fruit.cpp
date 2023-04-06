@@ -2,9 +2,7 @@
 
 void Fruit::initShape(const sf::RenderWindow& window, float x, float y) {
     this->shape.setFillColor(sf::Color::White);
-    this->shape.setOutlineThickness(0.5f);
-    this->shape.setOutlineColor(sf::Color::Black);
-    this->shape.setRadius(8.f);
+    this->shape.setSize(sf::Vector2f(10.f, 10.f));
     this->shape.setPosition(sf::Vector2f(x, y));
 }
 
@@ -16,7 +14,7 @@ Fruit::~Fruit() {
 
 }
 
-const sf::CircleShape Fruit::getShape() const {
+const sf::RectangleShape Fruit::getShape() const {
     return this->shape;
 }
 

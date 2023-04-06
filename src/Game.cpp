@@ -6,11 +6,21 @@ void Game::initVariables() {
     this->points = 0;
 }
 
+void Game::initMapTiles()
+{
+    for(int i = 0; i < mapHeight; i++) {
+        for(int j = 0; j < mapWidth; j++) {
+            if (sketch[j][i] == 1)
+                this->mapTiles.push_back(Map(*this->window, i * cellSize, j * cellSize));
+        }
+    }
+}
+
 void Game::initFruits() {
     for(int i = 0; i < mapHeight; i++) {
         for(int j = 0; j < mapWidth; j++) {
             if (sketch[j][i] == 0)
-            this->fruits.push_back(Fruit(*this->window, i * cellSize + 16.f, j * cellSize + 16.f));
+            this->fruits.push_back(Fruit(*this->window, i * cellSize + 20.f, j * cellSize + 20.f));
         }
     }
 }
@@ -31,6 +41,7 @@ void Game::manageEndGame()
 
 Game::Game() {
     this->initVariables();
+    this->initMapTiles();
     this->initFruits();
     this->initWindow();
 }
@@ -68,7 +79,6 @@ void Game::updateCollision() {
         if (this->pacman.getShape().getGlobalBounds().intersects(this->fruits[i].getShape().getGlobalBounds())) {
             this->points++;
             this->fruits.erase(this->fruits.begin() + i);
-            std::cout << "Dziala" << std::endl;
         }
     }
 }
@@ -86,12 +96,14 @@ void Game::update() {
 void Game::render() {
     this->window->clear();
 
-    this->map.render(*this->window);
-    this->pacman.render(this->window);
-
+    for (auto i : this->mapTiles) {
+        i.render(*this->window);
+    }
     for (auto i : this->fruits) {        
         i.render(*this->window);
     }
+
+    this->pacman.render(this->window);
 
     this->window->display();
 }
