@@ -3,6 +3,8 @@
 void Pacman::initVariables() {
     this->movementSpeed = 4.f;
     this->moveDirection = STOP;
+    this->nextPosX = static_cast<int>(round(this->shape.getPosition().x / cellSize));
+    this->nextPosY = static_cast<int>(round(this->shape.getPosition().y / cellSize));
 }
 
 void Pacman::initShapes() {
@@ -24,19 +26,21 @@ const sf::CircleShape & Pacman::getShape() const {
     return this->shape;
 }
 
-void Pacman::wallCollision()
+bool Pacman::canChangeDir()
 {
-    this->currentX = static_cast<int>(round((this->shape.getPosition().x + this->shape.getRadius() / 2) / cellSize));
-    this->currentY = static_cast<int>(round((this->shape.getPosition().y + this->shape.getRadius() / 2)/ cellSize));
-
-    if(this->map[this->currentX][this->currentY] == 1) {
-        this->shape.setPosition(currentX * cellSize + this->shape.getRadius(), currentY * cellSize + this->shape.getRadius());
-        this->moveDirection = STOP;
-    } 
+    if(abs(this->shape.getPosition().x / cellSize - round(this->shape.getPosition().x / cellSize)) < 0.2f &&
+        abs(this->shape.getPosition().y / cellSize - round(this->shape.getPosition().y / cellSize)) < 0.2f) {
+        return true;
+    }
+    return false;
 }
 
 void Pacman::railMoveHelper()
 {
+    if(!this->canChangeDir()) {
+        return;
+    }
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) // Left
     {
         this->moveDirection = LEFT;
@@ -56,31 +60,38 @@ void Pacman::railMoveHelper()
 }
 
 void Pacman::updateInput() {
-    this->currentX = static_cast<int>(round(this->shape.getPosition().x / cellSize));
-    this->currentY = static_cast<int>(round(this->shape.getPosition().y / cellSize));
 
-    if (map[currentY][currentX] == 1)
-    {
-        this->shape.setPosition(this->lastX * cellSize + this->shape.getRadius()/2, this->lastY * cellSize + this->shape.getRadius()/2);
-        this->moveDirection = STOP;
-        return;
+    if (this->moveDirection == RIGHT || moveDirection == BOTTOM) {
+        this->currentX = static_cast<int>((this->shape.getPosition().x - this->shape.getRadius()/2) / cellSize);
+        this->currentY = static_cast<int>((this->shape.getPosition().y - this->shape.getRadius()/2) / cellSize);
+    } else {
+        this->currentX = static_cast<int>((this->shape.getPosition().x + this->shape.getRadius()*2) / cellSize);
+        this->currentY = static_cast<int>((this->shape.getPosition().y + this->shape.getRadius()*2) / cellSize); 
     }
 
-    this->lastX = this->currentX;
-    this->lastY = this->currentY;
+    this->nextPosX = this->currentX;
+    this->nextPosY = this->currentY;
 
-    if (this->moveDirection == LEFT && map[currentY][currentX--] != 1) {
-        this->shape.move(-(cellSize / 48.f), 0);
+    if (this->moveDirection == LEFT) {
+        this->nextPosX = this->currentX -1;
+        if(map[nextPosY][nextPosX] != 1)
+            this->shape.move(-(cellSize / 48.f), 0);
     }
-    if (this->moveDirection == RIGHT && map[currentY][currentX++] != 1) {
-        this->shape.move(cellSize / 48.f, 0);
+    if (this->moveDirection == RIGHT) {
+        this->nextPosX = this->currentX + 1;
+        if(map[nextPosY][nextPosX] != 1)
+            this->shape.move(cellSize / 48.f, 0);
     }
-    if (this->moveDirection == BOTTOM && map[currentY++][currentX] != 1) {
-        this->shape.move(0, cellSize / 48.f);
+    if (this->moveDirection == BOTTOM) {
+        this->nextPosY = this->currentY + 1;
+        if(map[nextPosY][nextPosX] != 1)
+            this->shape.move(0, cellSize / 48.f);
     }
-    if (this->moveDirection == TOP && map[currentY--][currentX] != 1) {
-        this->shape.move(0, -(cellSize / 48.f));
-    }
+    if (this->moveDirection == TOP) {
+        this->nextPosY = this->currentY - 1;
+        if(map[nextPosY][nextPosX] != 1)
+            this->shape.move(0, -(cellSize / 48.f));
+    }    
 }
 
 void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
@@ -95,7 +106,6 @@ void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
 void Pacman::update(const sf::RenderTarget * target) {
     std::cout << "Pos X: " << this->shape.getPosition().x << "Pos Y: " << this->shape.getPosition().y << std::endl;
     this->railMoveHelper();
-    //this->wallCollision();
     this->updateInput();
     this->updateTeleportOnEdge(target);
 }

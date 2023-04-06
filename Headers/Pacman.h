@@ -47,8 +47,8 @@ private:
 
     int currentX;
     int currentY;
-    int lastX;
-    int lastY;
+    int nextPosX;
+    int nextPosY;
 
     float movementSpeed;
     MoveDirection moveDirection;
@@ -56,12 +56,12 @@ private:
     void initVariables();
     void initShapes();
 public:
-    Pacman(float x = 485.f, float y = 725.f);
+    Pacman(float x = 488.f, float y = 728.f);
     virtual ~Pacman();
 
     const sf::CircleShape& getShape() const;
 
-    void wallCollision();
+    bool canChangeDir();
     void railMoveHelper();
     void updateInput();
     void updateTeleportOnEdge(const sf::RenderTarget* target);
