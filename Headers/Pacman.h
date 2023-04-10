@@ -49,6 +49,7 @@ private:
     int currentY;
     int nextPosX;
     int nextPosY;
+    MoveDirection prevDir;
 
     float movementSpeed;
     MoveDirection moveDirection;

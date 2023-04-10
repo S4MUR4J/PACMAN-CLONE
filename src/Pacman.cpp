@@ -1,8 +1,9 @@
 #include "Pacman.h"
 
 void Pacman::initVariables() {
-    this->movementSpeed = 4.f;
+    this->movementSpeed = 1.f;
     this->moveDirection = STOP;
+    this->prevDir = STOP;
     this->nextPosX = static_cast<int>(round(this->shape.getPosition().x / cellSize));
     this->nextPosY = static_cast<int>(round(this->shape.getPosition().y / cellSize));
 }
@@ -28,8 +29,8 @@ const sf::CircleShape & Pacman::getShape() const {
 
 bool Pacman::canChangeDir()
 {
-    if(abs(this->shape.getPosition().x / cellSize - round(this->shape.getPosition().x / cellSize)) < 0.2f &&
-        abs(this->shape.getPosition().y / cellSize - round(this->shape.getPosition().y / cellSize)) < 0.2f) {
+    if(abs(this->shape.getPosition().x / cellSize - round(this->shape.getPosition().x / cellSize)) < 0.1f &&
+        abs(this->shape.getPosition().y / cellSize - round(this->shape.getPosition().y / cellSize)) < 0.1f) {
         return true;
     }
     return false;
@@ -37,6 +38,9 @@ bool Pacman::canChangeDir()
 
 void Pacman::railMoveHelper()
 {
+    bool changed = 0;
+    MoveDirection prevDirection = this->moveDirection;
+
     if(!this->canChangeDir()) {
         return;
     }
@@ -44,18 +48,27 @@ void Pacman::railMoveHelper()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) // Left
     {
         this->moveDirection = LEFT;
+        changed = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) // Right
     {
         this->moveDirection = RIGHT;
+        changed = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) // Down
     {
         this->moveDirection = BOTTOM;
+        changed = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) // Up
     {
         this->moveDirection = TOP;
+        changed = true;
+    }
+
+    if (changed) {
+        changed = false;
+        this->prevDir = prevDirection;
     }
 }
 
@@ -76,21 +89,29 @@ void Pacman::updateInput() {
         this->nextPosX = this->currentX -1;
         if(map[nextPosY][nextPosX] != 1)
             this->shape.move(-this->movementSpeed, 0);
+        else
+            this->moveDirection = this->prevDir;
     }
     if (this->moveDirection == RIGHT) {
         this->nextPosX = this->currentX + 1;
         if(map[nextPosY][nextPosX] != 1)
             this->shape.move(this->movementSpeed, 0);
+        else
+            this->moveDirection = this->prevDir;
     }
     if (this->moveDirection == BOTTOM) {
         this->nextPosY = this->currentY + 1;
         if(map[nextPosY][nextPosX] != 1)
             this->shape.move(0, this->movementSpeed);
+        else
+            this->moveDirection = this->prevDir;
     }
     if (this->moveDirection == TOP) {
         this->nextPosY = this->currentY - 1;
         if(map[nextPosY][nextPosX] != 1)
             this->shape.move(0, -this->movementSpeed);
+        else
+            this->moveDirection = this->prevDir;
     }    
 }
 
