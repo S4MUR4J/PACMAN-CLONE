@@ -9,6 +9,7 @@
 #include "Fruit.h"
 #include "Map.h"
 #include "SpecialFruit.h"
+#include "Ghost.h"
 #include <array>
 
 class Game
@@ -28,8 +29,8 @@ private:
         {4, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 4},
         {4, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 4},
         {4, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 4},
-        {4, 4, 4, 4, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 4, 4, 4, 4},
-        {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
+        {4, 4, 4, 4, 1, 0, 1, 0, 0, 0, 7, 0, 0, 0, 1, 0, 1, 4, 4, 4, 4},
+        {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 4, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
         {4, 4, 4, 4, 4, 0, 0, 0, 1, 7, 7, 7, 1, 0, 0, 0, 4, 4, 4, 4, 4},
         {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
         {4, 4, 4, 4, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 4, 4, 4, 4},
@@ -51,6 +52,7 @@ private:
     std::vector<Fruit> fruits;
     std::vector<Map> mapTiles;
     std::vector<SpecialFruit> specialFruits;
+    std::vector<Ghost> ghosts;
     float spawnTimerMax;
     float spawnTimer;
     int maxFruits;

@@ -3,6 +3,7 @@
 void Pacman::initVariables() {
     this->movementSpeed = 1.f;
     this->moveDirection = STOP;
+    this->boosted = false;
     this->prevDir = STOP;
     this->nextPosX = static_cast<int>(round(this->shape.getPosition().x / cellSize));
     this->nextPosY = static_cast<int>(round(this->shape.getPosition().y / cellSize));
@@ -25,6 +26,11 @@ Pacman::~Pacman() {
 
 const sf::CircleShape & Pacman::getShape() const {
     return this->shape;
+}
+
+bool Pacman::isBoosted()
+{
+    return this->boosted;
 }
 
 bool Pacman::canChangeDir()
@@ -123,8 +129,6 @@ void Pacman::updateInput() {
 
 void Pacman::boostTimer()
 {
-    std::cout << this->timer << std::endl;
-
     if(this->timer > 0) {
         this->timer--;
     } else 
@@ -135,10 +139,13 @@ void Pacman::boost(bool active)
 {
     if (active) {
         this->timer = static_cast<unsigned>(1000.f);
+        this->boosted = true;
         this->movementSpeed = 2.f;
     }
-    else 
+    else {
+        this->boosted = false;
         this->movementSpeed = 1.f;
+    }   
 }
 
 void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {

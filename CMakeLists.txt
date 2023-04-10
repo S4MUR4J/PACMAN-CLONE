@@ -10,13 +10,15 @@ add_executable(Pacman
     src/Fruit.cpp
     src/Map.cpp
     src/SpecialFruit.cpp
+    src/Ghost.cpp
 
     headers/Game.h
     headers/Pacman.h
     headers/Fruit.h
     headers/Constants.h
     headers/Map.h
-    headers/SpecialFruit.h)
+    headers/SpecialFruit.h
+    headers/Ghost.h)
 
 include_directories(headers /usr/include c:/SFML/include)
 

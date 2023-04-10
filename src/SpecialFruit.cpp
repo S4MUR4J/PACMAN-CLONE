@@ -3,7 +3,7 @@
 void SpecialFruit::initShape(const sf::RenderWindow &window, float x, float y)
 {
     this->shape.setFillColor(sf::Color::White);
-    this->shape.setRadius(8.f);
+    this->shape.setRadius(12.f);
     this->shape.setPosition(sf::Vector2f(x - this->shape.getRadius()/2, y - this->shape.getRadius()/2));
 }
 

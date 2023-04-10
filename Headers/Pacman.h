@@ -50,6 +50,7 @@ private:
     int nextPosX;
     int nextPosY;
     unsigned timer;
+    bool boosted;
     MoveDirection prevDir;
     float movementSpeed;
     MoveDirection moveDirection;
@@ -61,6 +62,7 @@ public:
     virtual ~Pacman();
 
     const sf::CircleShape& getShape() const;
+    bool isBoosted();
 
     bool canChangeDir();
     void railMoveHelper();
