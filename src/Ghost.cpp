@@ -27,7 +27,7 @@ sf::RectangleShape Ghost::getShape()
 
 void Ghost::moveGhost()
 {
-    this->shape.setPosition(this->shape.getPosition().x + 1, 0.f);
+    this->shape.move(movementSpeed, 0.f);
 }
 
 void Ghost::update()

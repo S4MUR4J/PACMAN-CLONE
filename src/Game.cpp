@@ -107,6 +107,9 @@ void Game::update() {
 
     if (this->endGame == false) {
         this->pacman.update(this->window);
+        for(size_t i = 0; i < this->ghosts.size(); i++) {
+            this->ghosts[i].moveGhost();
+        }
         this->updateCollision();
         this->manageEndGame();
     }
