@@ -1,9 +1,12 @@
 #include <iostream>
 #include "Game.h"
 
+/*
+* Funkcja main zarządza wywołaniem silnika gry, który, który gdy
+*  gra zostanie zakończona kończy działanie programu
+*/
+ 
 int main() {
-    srand(static_cast<unsigned>(time(0)));
-
     Game game;
 
     while(game.executing())
