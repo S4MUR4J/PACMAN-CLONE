@@ -6,6 +6,7 @@
  */
 void Ghost::initVariables() {
     this->movementSpeed = 1.f;
+    this->moveDir = STOP;
     this->feared = false;
 }
 
@@ -66,6 +67,53 @@ bool Ghost::isFeared()
     return this->feared;
 }
 
+sf::Vector2f Ghost::getPlayerOrigin()
+{
+    float x = this->shape.getPosition().x + this->shape.getSize().x/2;
+    float y = this->shape.getPosition().y + this->shape.getSize().y/2;
+    sf::Vector2f origin(x, y);
+    return origin;
+}
+
+sf::Vector2f Ghost::setPlayerOrigin()
+{
+    sf::Vector2f origin = getPlayerOrigin();
+    if (this->moveDir == LEFT && this->collisionTbl[0] != 1) {
+        origin.x = (floor(origin.x/cellSize) - 1) * cellSize + this->shape.getSize().x/2;
+        origin.y = floor(origin.y/cellSize) * cellSize + this->shape.getSize().y/2;
+    }
+    if (this->moveDir == RIGHT && this->collisionTbl[1] != 1) {
+        origin.x = (floor(origin.x/cellSize) + 1) * cellSize + this->shape.getSize().x/2;
+        origin.y = floor(origin.y/cellSize) * cellSize + this->shape.getSize().y/2;
+    }
+    if (this->moveDir == TOP && this->collisionTbl[2] != 1) {
+        origin.x = floor(origin.x/cellSize) * cellSize + this->shape.getSize().x/2;
+        origin.y = (floor(origin.y/cellSize) - 1) * cellSize + this->shape.getSize().y/2;
+    }
+    if (this->moveDir == BOTTOM && this->collisionTbl[3] != 1) {
+        origin.x = floor(origin.x/cellSize) * cellSize + this->shape.getSize().x/2;
+        origin.y = (floor(origin.y/cellSize) + 1) * cellSize + this->shape.getSize().y/2;
+    }
+    
+    this->shape.setPosition(origin);
+}
+
+void Ghost::changeDir()
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        this->moveDir = LEFT;
+    } 
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        this->moveDir = RIGHT;
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        this->moveDir = TOP;
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        this->moveDir = BOTTOM;
+    }
+}
+
 /**
  * Funkcja ta odpowiada za logikę jaką za sobie niesie bycie w stanie przerażenia i 
  * nie wpływa to na na możliwość zniszczenia gracza i prędkość duch
@@ -101,6 +149,42 @@ void Ghost::updateTeleportOnEdge(const sf::RenderTarget *target) {
     }
 }
 
+
+bool Ghost::collision(float posX, float posY)
+{
+    bool result = false;
+
+    int gridX = static_cast<int>(floor(posX / cellSize));
+    int gridY = static_cast<int>(floor(posY / cellSize));
+
+    switch(this->moveDir) {
+        case LEFT:
+            if(map[gridY][gridX--] == 1) {
+                return true;
+            }
+            break;
+        case RIGHT:
+            if(map[gridY][gridX++] == 1) {
+                return true;
+            }
+            break;
+        case TOP:
+            if(map[gridY--][gridX] == 1) {
+                return true;
+            }
+            break;
+        case BOTTOM:
+            if(map[gridY++][gridX] == 1) {
+                return true;
+            }
+            break;
+    }
+
+    // std::cout << gridX << " " << gridY << std::endl;
+
+    return result;
+}
+
 /**
  * Funkcja ta posiada logikę poruszania sie ducha, który śledzi naszego gracza.
  * 
@@ -109,22 +193,53 @@ void Ghost::updateTeleportOnEdge(const sf::RenderTarget *target) {
  */
 void Ghost::moveGhost(float x, float y)
 {
-    float ghostX = this->shape.getPosition().x;
-    float ghostY = this->shape.getPosition().y;
+    sf::Vector2f position = getPlayerOrigin();
+    float ghostX = position.x;
+    float ghostY = position.y;
+
+    // std::cout << ghostX << " " << ghostY << std::endl;
+    changeDir();
+    for (int i = 0; i < 4; i ++) {
+        if(i == 0)
+            this->collisionTbl[0] = collision(ghostX - movementSpeed, ghostY); // Left
+        if(i == 1)
+            this->collisionTbl[1] = collision(ghostX + movementSpeed, ghostY); // Right
+        if(i == 2)
+            this->collisionTbl[2] = collision(ghostX, ghostY - movementSpeed); // Top
+        if(i == 3)
+            this->collisionTbl[3] = collision(ghostX, ghostY + movementSpeed); // Bottom
+    }
+    for (int i = 0; i < 4; i++) {
+        //std::cout << collisionTbl[i] << " ";
+    }
+    //std::cout << "\n";
 
     if (!this->feared) {
         this->shape.move(-this->movementSpeed, -this->movementSpeed);
         return;
     }
 
-    if (ghostX > x)
+    // if(this->moveDir != STOP)
+    //     setPlayerOrigin();
+    
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && collisionTbl[0] != true) {
         this->shape.move(-this->movementSpeed, 0.f);
-    if (ghostX < x)
+        this->moveDir = LEFT;
+    } 
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && collisionTbl[1] != true) {
         this->shape.move(this->movementSpeed, 0.f);
-    if (ghostY > y)
+        this->moveDir = RIGHT;
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && collisionTbl[2] != true) {
         this->shape.move(0.f, -this->movementSpeed);
-    if (ghostY < y)
+        this->moveDir = TOP;
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && collisionTbl[3] != true) {
         this->shape.move(0.f, this->movementSpeed);
+        this->moveDir = BOTTOM;
+    }
+        
 }
 
 /**
