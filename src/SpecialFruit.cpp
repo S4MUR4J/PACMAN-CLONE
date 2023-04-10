@@ -12,6 +12,7 @@ void SpecialFruit::initShape(const sf::RenderWindow &window, float x, float y)
     this->shape.setFillColor(sf::Color::White);
     this->shape.setRadius(12.f);
     this->shape.setPosition(sf::Vector2f(x - this->shape.getRadius()/2, y - this->shape.getRadius()/2));
+    
 }
 
 /**
@@ -22,7 +23,7 @@ void SpecialFruit::initShape(const sf::RenderWindow &window, float x, float y)
  * @param x - pozycja w osi X specjalnego owocu
  * @param y - pozycja w osi X specjalnego owocu
  */
-SpecialFruit::SpecialFruit(const sf::RenderWindow &window, float x, float y)
+SpecialFruit::SpecialFruit(const sf::RenderWindow &window, float x, float y) : Fruit(window, x, y)
 {
     this->initShape(window, x, y);
 }
@@ -32,7 +33,6 @@ SpecialFruit::SpecialFruit(const sf::RenderWindow &window, float x, float y)
  */
 SpecialFruit::~SpecialFruit()
 {
-
 }
 
 /**
@@ -46,19 +46,10 @@ const sf::CircleShape SpecialFruit::getShape() const
 }
 
 /**
- * Aktualizacja danych na temat specjalnego owoca
- */
-void SpecialFruit::update()
-{
-
-}
-
-/**
  * Funkcja odpowiadająca za rysowanie na ekranie specjalnego owocu
  * 
- * @param target - ekran na którym będzie renderowany specjalnyowoc
+ * @param target - ekran na którym będzie renderowany specjalny owoc
  */
-void SpecialFruit::render(sf::RenderTarget &target)
-{
+void SpecialFruit::render(sf::RenderTarget &target) {
     target.draw(this->shape);
 }

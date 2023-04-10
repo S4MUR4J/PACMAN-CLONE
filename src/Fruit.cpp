@@ -30,7 +30,6 @@ Fruit::Fruit(const sf::RenderWindow& window, float x, float y) {
  * Destruktor specjalnego owocu
  */
 Fruit::~Fruit() {
-
 }
 
 /**
@@ -40,13 +39,6 @@ Fruit::~Fruit() {
  */
 const sf::RectangleShape Fruit::getShape() const {
     return this->shape;
-}
-
-/**
- * Aktualizacja danych na temat owoca
- */
-void Fruit::update() {
-
 }
 
 /**

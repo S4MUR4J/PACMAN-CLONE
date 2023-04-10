@@ -83,7 +83,7 @@ void Ghost::Fear(bool isOff)
         this->movementSpeed = 0.1f;
     }
 
-    std::cout << this->movementSpeed << std::endl;
+    //std::cout << this->movementSpeed << std::endl;
 }
 
 /**
