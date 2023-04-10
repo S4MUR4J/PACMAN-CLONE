@@ -77,23 +77,8 @@ sf::Vector2f Ghost::getPlayerOrigin()
 
 sf::Vector2f Ghost::setPlayerOrigin()
 {
-    sf::Vector2f origin = getPlayerOrigin();
-    if (this->moveDir == LEFT && this->collisionTbl[0] != 1) {
-        origin.x = (floor(origin.x/cellSize) - 1) * cellSize + this->shape.getSize().x/2;
-        origin.y = floor(origin.y/cellSize) * cellSize + this->shape.getSize().y/2;
-    }
-    if (this->moveDir == RIGHT && this->collisionTbl[1] != 1) {
-        origin.x = (floor(origin.x/cellSize) + 1) * cellSize + this->shape.getSize().x/2;
-        origin.y = floor(origin.y/cellSize) * cellSize + this->shape.getSize().y/2;
-    }
-    if (this->moveDir == TOP && this->collisionTbl[2] != 1) {
-        origin.x = floor(origin.x/cellSize) * cellSize + this->shape.getSize().x/2;
-        origin.y = (floor(origin.y/cellSize) - 1) * cellSize + this->shape.getSize().y/2;
-    }
-    if (this->moveDir == BOTTOM && this->collisionTbl[3] != 1) {
-        origin.x = floor(origin.x/cellSize) * cellSize + this->shape.getSize().x/2;
-        origin.y = (floor(origin.y/cellSize) + 1) * cellSize + this->shape.getSize().y/2;
-    }
+    sf::Vector2f origin = sf::Vector2f((getPlayerOrigin().x / cellSize), (getPlayerOrigin().y / cellSize));
+    origin = sf::Vector2f(origin.x * cellSize, origin.y * cellSize);
     
     this->shape.setPosition(origin);
 }
@@ -221,23 +206,24 @@ void Ghost::moveGhost(float x, float y)
 
     // if(this->moveDir != STOP)
     //     setPlayerOrigin();
+
+    if(abs(getPlayerOrigin().x / cellSize - floor(getPlayerOrigin().x / cellSize) > 1.f) || 
+        abs(getPlayerOrigin().y / cellSize - floor(getPlayerOrigin().y / cellSize) > 1.f )) {
+        this->setPlayerOrigin();
+    }
     
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && collisionTbl[0] != true) {
+    if (this->moveDir == LEFT && this->collisionTbl[0] != true) {
         this->shape.move(-this->movementSpeed, 0.f);
-        this->moveDir = LEFT;
     } 
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && collisionTbl[1] != true) {
+    else if (this->moveDir == RIGHT && this->collisionTbl[1] != true) {
         this->shape.move(this->movementSpeed, 0.f);
-        this->moveDir = RIGHT;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && collisionTbl[2] != true) {
+    else if (this->moveDir == TOP && this->collisionTbl[2] != true) {
         this->shape.move(0.f, -this->movementSpeed);
-        this->moveDir = TOP;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && collisionTbl[3] != true) {
+    else if (this->moveDir == BOTTOM && this->collisionTbl[3] != true) {
         this->shape.move(0.f, this->movementSpeed);
-        this->moveDir = BOTTOM;
     }
         
 }
