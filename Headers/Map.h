@@ -5,9 +5,12 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
-#include <array>
-
 #include "Constants.h"
+
+/*
+*   Klasa odpowiadająca za zainicjowanie wyglądu bloku mapy, ustawienie jego pozycji
+*   oraz renderowanie każdego z nich szczegóły przy funkcjach w .cpp
+*/
 
 class Map {
 private:
