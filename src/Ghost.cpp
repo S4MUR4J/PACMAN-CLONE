@@ -35,12 +35,14 @@ void Ghost::Fear(bool isOff)
 {
     if(!isOff) {
         this->feared = true;
-        this->movementSpeed = 0.1f;
+        this->movementSpeed = 0.55f;
     }      
     else {
         this->feared = false;
-        this->movementSpeed = 1.f;
+        this->movementSpeed = 0.1f;
     }
+
+    std::cout << this->movementSpeed << std::endl;
 }
 
 void Ghost::updateTeleportOnEdge(const sf::RenderTarget *target) {
@@ -52,15 +54,30 @@ void Ghost::updateTeleportOnEdge(const sf::RenderTarget *target) {
     }
 }
 
-void Ghost::moveGhost()
+void Ghost::moveGhost(float x, float y)
 {
-    this->shape.move(this->movementSpeed, 0.f);
+    float ghostX = this->shape.getPosition().x;
+    float ghostY = this->shape.getPosition().y;
+
+    if (!this->feared) {
+        this->shape.move(-this->movementSpeed, -this->movementSpeed);
+        return;
+    }
+
+    if (ghostX > x)
+        this->shape.move(-this->movementSpeed, 0.f);
+    if (ghostX < x)
+        this->shape.move(this->movementSpeed, 0.f);
+    if (ghostY > y)
+        this->shape.move(0.f, -this->movementSpeed);
+    if (ghostY < y)
+        this->shape.move(0.f, this->movementSpeed);
 }
 
-void Ghost::update(const sf::RenderTarget * target)
+void Ghost::update(const sf::RenderTarget * target, float x, float y)
 {
     this->updateTeleportOnEdge(target);
-    this->moveGhost();
+    this->moveGhost(x, y);
 }
 
 void Ghost::render(sf::RenderTarget * target)

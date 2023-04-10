@@ -25,8 +25,8 @@ class Ghost {
 
         bool isFeared();
         void Fear(bool isOff);
-        void moveGhost();
+        void moveGhost(float x, float y);
         void updateTeleportOnEdge(const sf::RenderTarget *target);
-        void update(const sf::RenderTarget * target);
+        void update(const sf::RenderTarget * target, float x, float y);
         void render(sf::RenderTarget *target);
 };

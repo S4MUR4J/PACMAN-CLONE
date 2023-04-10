@@ -108,7 +108,9 @@ void Game::update() {
     if (this->endGame == false) {
         this->pacman.update(this->window);
         for(size_t i = 0; i < this->ghosts.size(); i++) {
-            this->ghosts[i].update(this->window);
+            this->ghosts[i].update(this->window, 
+                                this->pacman.getShape().getPosition().x,
+                                this->pacman.getShape().getPosition().y);
             if(this->pacman.isBoosted())
                 this->ghosts[i].Fear(true);
             if(!this->pacman.isBoosted())
