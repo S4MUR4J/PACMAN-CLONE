@@ -7,11 +7,13 @@
 #include <SFML/Network.hpp>
 #include "Constants.h"
 
-/*
-*   Klasa odpowiadająca za zainicjowanie wyglądu bloku mapy, ustawienie jego pozycji
-*   oraz renderowanie każdego z nich szczegóły przy funkcjach w .cpp
-*/
-
+/**
+ * @class Map
+ * 
+ * Klasa odpowiadająca za inicjację wyglądu bloku mapy, ustawienie jego pozycji oraz
+ * ich renderowania, gdzie jest niezależna od budowy struktury mapy
+ * 
+ */
 class Map {
 private:
     sf::RectangleShape shape;

@@ -7,6 +7,12 @@
 #include <SFML/Network.hpp>
 #include "Constants.h"
 
+/**
+ * @class Fruit
+ * 
+ * Klasa przechowyjąca informacje na temat mniejszych owoców. Odpowiada za ustawienie
+ * parametów tego obiektu, aktualizacje ich oraz rysowanie na ekranie.
+ */
 class Fruit {
 private:
     sf::RectangleShape shape;

@@ -1,5 +1,9 @@
 #include "Pacman.h"
 
+/**
+ * W funkcji następuje inicjacja podstawowych zmiennych potrzebnych do rozpoczęcia 
+ * działań na obiekcie
+ */
 void Pacman::initVariables() {
     this->movementSpeed = 1.f;
     this->moveDirection = STOP;
@@ -9,30 +13,61 @@ void Pacman::initVariables() {
     this->nextPosY = static_cast<int>(round(this->shape.getPosition().y / cellSize));
 }
 
+/**
+ * Inicjacja wyglądu obiektu klasy, ustawienie koloru i średnicy
+ */
 void Pacman::initShapes() {
     this->shape.setFillColor(sf::Color::Yellow);
     this->shape.setRadius(16.f);
 }
 
+/**
+ * Konstruktor tworzący obiekt gracza
+ * 
+ * @param x - pozycja startowa gracza na osi X 
+ * @param y - pozycja startowa gracza na osi X 
+ */
 Pacman::Pacman(float x, float y) {
     this->shape.setPosition(x, y);
     this->initVariables();
     this->initShapes();
 }
 
+/**
+ * Destuktor obiektu
+ */
 Pacman::~Pacman() {
     
 }
 
+/**
+ * Funkcja jest getter'em Shape'u pacmana wykorzystywana do logiki w silniku 
+ *
+ * 
+ * @return const sf::CircleShape& - zwracany shape obiektu
+ */
 const sf::CircleShape & Pacman::getShape() const {
     return this->shape;
 }
 
+/**
+ * Funkcja jest getter'em informacji o interakcji z specjalnym owocem
+ * 
+ * @return true - nasz gracz ma boost spowodowanego zjedzeniem specjalnego owocu
+ * @return false - nasz gracz nie ma boost'u czyli nie zjadł specjalnego owacu
+ */
 bool Pacman::isBoosted()
 {
     return this->boosted;
 }
 
+/**
+ * Funkcja daje nam informacje na temat możliwości zmiany kierunku spowodowana
+ * miejscem położenia na gridzie. Jeśli nasz gracz znajduje się blisko zakrętu
+ * 
+ * @return true - gracz moze zmienić kierunek
+ * @return false - gracz nie może zmienić kierunku
+ */
 bool Pacman::canChangeDir()
 {
     if(abs(this->shape.getPosition().x / cellSize - round(this->shape.getPosition().x / cellSize)) < 0.1f &&
@@ -42,6 +77,12 @@ bool Pacman::canChangeDir()
     return false;
 }
 
+/**
+ * Funkcja ta zbiera informacje z klawiatury na temat wyboru użytkownika programu
+ * w, którą stronę decyduje się iść. Tak samo ma zmienna changed, która pomaga nam w
+ * przypadku gdy nie możemy skręcić wtedy postać wraca do poprzedniego kierunku. Ściśle 
+ * powiązana z funkcją updateInput().
+ */
 void Pacman::railMoveHelper()
 {
     bool changed = 0;
@@ -78,6 +119,11 @@ void Pacman::railMoveHelper()
     }
 }
 
+/**
+ * W tej funkcji zgodnie z wybranym kierunkiem jest poruszany gracz po mapie, w
+ * zależności od kierunku jego pozycję zbieramy w inny sposób do currentX, ze wględu
+ * na działanie samego sfml'a. Jeśli naprzeciw kierunku gracza jest ściana ten się zatrzymuje.
+ */
 void Pacman::updateInput() {
 
     if (this->moveDirection == RIGHT || moveDirection == BOTTOM) {
@@ -127,6 +173,10 @@ void Pacman::updateInput() {
     
 }
 
+/**
+ * Funkcja ta to timer zgodnie z jego ustawieniem zmniejszamy czas aż dojdziemy do zera.
+ * Ściśle związana z funkcja boost, którą wywołuje po upłynięciu czasu wyłączając boost
+ */
 void Pacman::boostTimer()
 {
     if(this->timer > 0) {
@@ -135,6 +185,12 @@ void Pacman::boostTimer()
         boost(false);
 }
 
+/**
+ * Funkcja ta przetrzymuje logikę aktywowania, dezaktywowania boost'u w zależności
+ * od parametru. Tak samo ustawia timer jego działania
+ * 
+ * @param active - tu przy wywołaniu przekazujemy czy wyłączamy (false) czy włączamy boost (true)
+ */
 void Pacman::boost(bool active)
 {
     if (active) {
@@ -148,6 +204,12 @@ void Pacman::boost(bool active)
     }   
 }
 
+/**
+ * Funkcja ta jeśli znajdujemy się na krawędzi mapy na osi X (mamy dwa takie tunele)
+ * przenosi nas na druga stronę tunelu.
+ * 
+ * @param target - ekran po po którym porusza się obiekt
+ */
 void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
     if (this->shape.getGlobalBounds().left <= 0.f) {   
         this->shape.setPosition(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top); 
@@ -157,6 +219,11 @@ void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
     }
 }
 
+/**
+ * Aktualizacja całej logiki wywoływania funkcji w pętli programu
+ * 
+ * @param target - parametr potrzebny nam do zdobycia wielkości ekranu
+ */
 void Pacman::update(const sf::RenderTarget * target) {
     //std::cout << "Pos X: " << this->shape.getPosition().x << "Pos Y: " << this->shape.getPosition().y << std::endl;
     this->boostTimer();
@@ -165,6 +232,11 @@ void Pacman::update(const sf::RenderTarget * target) {
     this->updateTeleportOnEdge(target);
 }
 
+/**
+ * Funkcja drukuje nam obiekt tej klasy na ekranie
+ * 
+ * @param target - ekran na, którym drukujemy
+ */
 void Pacman::render(sf::RenderTarget * target) {
     target->draw(this->shape);
 }

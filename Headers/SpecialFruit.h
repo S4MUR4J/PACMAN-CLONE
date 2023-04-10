@@ -7,6 +7,12 @@
 #include <SFML/Network.hpp>
 #include "Constants.h"
 
+/**
+ * @class SpecialFruit
+ * 
+ * Klasa przechowyjąca informacje na temat specjalnych owoców. Odpowiada za ustawienie
+ * parametów tego obiektu, aktualizacje ich oraz rysowanie na ekranie.
+ */
 class SpecialFruit {
 private:
     sf::CircleShape shape;

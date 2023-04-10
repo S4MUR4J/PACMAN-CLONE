@@ -12,6 +12,14 @@
 #include "Ghost.h"
 #include <array>
 
+/**
+ * @class Game
+ * 
+ * Klasa ta jest silnikiem gry składa w całość wszystkie inne klasy i interakcje między nimi.
+ * Jako jedyna jest bezpośrednio wywołana w mainie. Odpowiada za zebranie rysowania obiektów na ekranie,
+ * aktualizacje wszystkich obiektów oraz interakcje między nimi. Przechowuje również okno, które jest
+ * w niej wywoływane i przepuszczane jako parametr do innych klas.
+ */
 class Game
 {
 private:

@@ -9,6 +9,12 @@
 #include <SFML/Network.hpp>
 #include "Constants.h"
 
+/**
+ * @class Ghost
+ * 
+ * Klasa ta przechowuje dane oraz całą logikę działania przeciwników (tzw. duchów). Zmienia dane
+ * na temat obiektu, rysuje go oraz odpowiada za poruszanie się.
+ */
 class Ghost {
     private:
         sf::RectangleShape shape;

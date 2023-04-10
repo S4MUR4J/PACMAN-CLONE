@@ -9,14 +9,12 @@
 #include <SFML/Network.hpp>
 #include "Constants.h"
 
-enum MoveDirection{
-    STOP,
-    LEFT,
-    RIGHT,
-    TOP,
-    BOTTOM
-};
-
+/**
+ * @class Pacman
+ * 
+ * Klasa odpowiadająca za przechowywanie informacji o graczu, przetrzymująca logikę
+ * działania gracza, inicjowanie jego parametrów i renderowanie go na ekranie
+ */
 class Pacman{
 private:
     sf::CircleShape shape;

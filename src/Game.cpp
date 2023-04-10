@@ -1,11 +1,16 @@
 #include "Game.h"
 
+/**
+ * Inicjacja podstawowych zmiennych gry takich jak stan gry i punktacja
+ */
 void Game::initVariables() {
     this->endGame = false;
-    this->maxFruits = 10;
     this->points = 0;
 }
 
+/**
+ * Funkcja unicjująca tablicę przechowującej wszystkie bloki mapy, na podstawie szkicu mapu
+ */
 void Game::initMapTiles()
 {
     for(int i = 0; i < mapHeight; i++) {
@@ -16,6 +21,10 @@ void Game::initMapTiles()
     }
 }
 
+/**
+ * Funkcja unicjująca tablicę przechowującej wszystkie owoce i owoce specjalne,
+ *  na podstawie szkicu mapu
+ */
 void Game::initFruits() {
     for(int i = 0; i < mapHeight; i++) {
         for(int j = 0; j < mapWidth; j++) {
@@ -29,6 +38,10 @@ void Game::initFruits() {
     }
 }
 
+/**
+ * Inicjacja okna gry, ustawianie jego wielkości, limitu klatek na sekundę i jego
+ * przycisków takich jak minimalizacja zamknięcie.
+ */
 void Game::initWindow() {
     this->videoMode.width = mapWidth * cellSize;
     this->videoMode.height = mapHeight * cellSize;
@@ -36,13 +49,26 @@ void Game::initWindow() {
     this->window->setFramerateLimit(165);
 }
 
+/**
+ * Funkcja ta przechowuje logikę kończenia gry dzieję się to gdy zjemy wszystkie owoce
+ * i wszystkie owoce specjalne uznajemy wtedy to za wygraną grę
+ */
 void Game::manageEndGame()
 {
-    if(this->fruits.empty()) {
+    if(this->fruits.empty() && this->specialFruits.empty()) {
         this->endGame = true;
+    }
+    for (size_t i = 0; i < this->ghosts.size(); i++) {
+        if (this->pacman.getShape().getGlobalBounds().intersects(this->ghosts[i].getShape().getGlobalBounds())) {
+            if (!this->pacman.isBoosted())
+                this->endGame = true;
+        }
     }
 }
 
+/**
+ * Konstruktor klasy silnika gry inicjuje zmienne, budowę mapy, ustawienie owoców i okna
+ */
 Game::Game() {
     this->initVariables();
     this->initMapTiles();
@@ -50,18 +76,38 @@ Game::Game() {
     this->initWindow();
 }
 
+/**
+ * Destruktor klasy silnika gry usuwa okno i zamyka aplikacje
+ */
 Game::~Game() {
     delete this->window;
 }
 
+/**
+ * Funkcja ta to getter infromacji o ostanie gry
+ * 
+ * @return true - gra została skończona
+ * @return false - gra nie została skończona
+ */
 const bool Game::getEndGame() const {
     return this->endGame;
 }
 
+/**
+ * Funkcja przekazuje informacje na temat stanu gry, czy jest w trakcie działania 
+ * czy została właśnie ukończona przez przegranie lub zamknięcie okna
+ * 
+ * @return true - gra się toczy
+ * @return false - gra została skończona
+ */
 const bool Game::executing() const {
     return this->window->isOpen() && this->endGame == false;
 }
 
+/**
+ * Funkcja sprawdzająca eventy, w celu zamknięcia okna. Jeśli klikniemy ESC lub
+ * gra zostanie ukończona zamykamy działanie programu i okno.
+ */
 void Game::pollEvents() {
     while (this->window->pollEvent(this->event))
     {
@@ -78,6 +124,12 @@ void Game::pollEvents() {
     }
 }
 
+/**
+ * W tej funkcji sprawdzamy kolizję między obiektami gry, takimi jak owoce, 
+ * specjalne owoce i gracz. W przypadku owoców pozwala nam na ich podniesienia
+ * i zwiększenie punktacji.
+ */
+
 void Game::updateCollision() {
     for (size_t i = 0; i < this->fruits.size(); i++) {
         if (this->pacman.getShape().getGlobalBounds().intersects(this->fruits[i].getShape().getGlobalBounds())) {
@@ -92,16 +144,12 @@ void Game::updateCollision() {
             this->specialFruits.erase(this->specialFruits.begin() + i);
         }
     }
-    for (size_t i = 0; i < this->ghosts.size(); i++) {
-        if (this->pacman.getShape().getGlobalBounds().intersects(this->ghosts[i].getShape().getGlobalBounds())) {
-            if (!this->pacman.isBoosted())
-                this->endGame = true;
-            else 
-                return;
-        }
-    }
 }
 
+/**
+ * Aktualizacja wszystkich obiektów i eventów naszego programu, aktualnie również zmieniająca
+ * stan przerażenia ducha Wywołujemy to również całą logikę silnika.
+ */
 void Game::update() {
     this->pollEvents();
 
@@ -121,6 +169,10 @@ void Game::update() {
     }
 }
 
+/**
+ * Funkcja w, której rysujemy wszystkie obiekty klasy na ekranie. Na początku czyścimy ekran 
+ * drukujemy zawartość i czyścimy ekran. Dzieję się to co klatkę.
+ */
 void Game::render() {
     this->window->clear();
 
