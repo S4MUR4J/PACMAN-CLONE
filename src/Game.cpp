@@ -23,8 +23,8 @@ void Game::initFruits() {
                 this->fruits.push_back(Fruit(*this->window, i * cellSize + 20.f, j * cellSize + 20.f));
             if (sketch[j][i] == 3)
                 this->specialFruits.push_back(SpecialFruit(*this->window, i * cellSize + 20.f, j * cellSize + 20.f));
-            if (sketch[j][i] == 7)  
-                this->ghosts.push_back(Ghost(*this->window, i * cellSize + 12.f, j * cellSize + 12.f)) ;
+            if(sketch[j][i] == 7)
+                this->ghosts.push_back(Ghost(*this->window, i * cellSize + 12.f, j * cellSize + 12.f));
         }
     }
 }
@@ -108,7 +108,11 @@ void Game::update() {
     if (this->endGame == false) {
         this->pacman.update(this->window);
         for(size_t i = 0; i < this->ghosts.size(); i++) {
-            this->ghosts[i].moveGhost();
+            this->ghosts[i].update(this->window);
+            if(this->pacman.isBoosted())
+                this->ghosts[i].Fear(true);
+            if(!this->pacman.isBoosted())
+                this->ghosts[i].Fear(false);
         }
         this->updateCollision();
         this->manageEndGame();

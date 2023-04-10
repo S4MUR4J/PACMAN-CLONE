@@ -12,7 +12,8 @@
 class Ghost {
     private:
         sf::RectangleShape shape;
-        int movementSpeed;
+        float movementSpeed;
+        bool feared;
 
         void initVariables();
         void initShapes(float x, float y);
@@ -22,7 +23,10 @@ class Ghost {
 
         sf::RectangleShape getShape();
 
+        bool isFeared();
+        void Fear(bool isOff);
         void moveGhost();
-        void update();
+        void updateTeleportOnEdge(const sf::RenderTarget *target);
+        void update(const sf::RenderTarget * target);
         void render(sf::RenderTarget *target);
 };
