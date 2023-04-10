@@ -85,34 +85,60 @@ void Pacman::updateInput() {
     this->nextPosX = this->currentX;
     this->nextPosY = this->currentY;
 
-    if (this->moveDirection == LEFT) {
+    if (this->moveDirection == LEFT) { 
         this->nextPosX = this->currentX -1;
-        if(map[nextPosY][nextPosX] != 1)
+        if(map[nextPosY][nextPosX] != 1) {
             this->shape.move(-this->movementSpeed, 0);
+        }
         else
             this->moveDirection = this->prevDir;
     }
     if (this->moveDirection == RIGHT) {
         this->nextPosX = this->currentX + 1;
-        if(map[nextPosY][nextPosX] != 1)
+        if(map[nextPosY][nextPosX] != 1) {
             this->shape.move(this->movementSpeed, 0);
+        }
         else
             this->moveDirection = this->prevDir;
     }
     if (this->moveDirection == BOTTOM) {
         this->nextPosY = this->currentY + 1;
-        if(map[nextPosY][nextPosX] != 1)
+        if(map[nextPosY][nextPosX] != 1) 
+        {
             this->shape.move(0, this->movementSpeed);
+        }
         else
             this->moveDirection = this->prevDir;
     }
     if (this->moveDirection == TOP) {
         this->nextPosY = this->currentY - 1;
-        if(map[nextPosY][nextPosX] != 1)
+        if(map[nextPosY][nextPosX] != 1) {
             this->shape.move(0, -this->movementSpeed);
+        } 
         else
             this->moveDirection = this->prevDir;
-    }    
+    }   
+    
+}
+
+void Pacman::boostTimer()
+{
+    std::cout << this->timer << std::endl;
+
+    if(this->timer > 0) {
+        this->timer--;
+    } else 
+        boost(false);
+}
+
+void Pacman::boost(bool active)
+{
+    if (active) {
+        this->timer = static_cast<unsigned>(1000.f);
+        this->movementSpeed = 2.f;
+    }
+    else 
+        this->movementSpeed = 1.f;
 }
 
 void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
@@ -126,6 +152,7 @@ void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
 
 void Pacman::update(const sf::RenderTarget * target) {
     //std::cout << "Pos X: " << this->shape.getPosition().x << "Pos Y: " << this->shape.getPosition().y << std::endl;
+    this->boostTimer();
     this->railMoveHelper();
     this->updateInput();
     this->updateTeleportOnEdge(target);

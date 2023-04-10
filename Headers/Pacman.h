@@ -49,8 +49,8 @@ private:
     int currentY;
     int nextPosX;
     int nextPosY;
+    unsigned timer;
     MoveDirection prevDir;
-
     float movementSpeed;
     MoveDirection moveDirection;
 
@@ -65,6 +65,8 @@ public:
     bool canChangeDir();
     void railMoveHelper();
     void updateInput();
+    void boostTimer();
+    void boost(bool active);
     void updateTeleportOnEdge(const sf::RenderTarget* target);
 
     void update(const sf::RenderTarget* target);
