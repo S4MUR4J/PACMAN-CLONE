@@ -261,7 +261,6 @@ void Ghost::moveGhost(float x, float y)
     }
 
     if (!this->feared) {
-        this->shape.move(-this->movementSpeed, -this->movementSpeed);
         return;
     }
 
