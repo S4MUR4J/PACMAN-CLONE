@@ -14,6 +14,20 @@
  * Klasa przechowyjąca informacje na temat mniejszych owoców. Odpowiada za ustawienie
  * parametów tego obiektu, aktualizacje ich oraz rysowanie na ekranie.
  */
+
+/**
+ * Szablon ten jest getterem różnych typów zmiennych
+ * 
+ * @param data zmienna ktory chcemy przekazać
+ * 
+ * @return zwracamy zmienna obiektu
+*/
+template <typename T>
+T getShapeTemplate(T data) {
+    T result = data;
+    return result;
+}
+
 class Fruit {
 private:
     sf::RectangleShape shape;

@@ -42,7 +42,8 @@ SpecialFruit::~SpecialFruit()
  */
 const sf::CircleShape SpecialFruit::getShape() const
 {
-    return this->shape;
+    sf::CircleShape result = getShapeTemplate<sf::CircleShape>(this->shape);
+    return result;
 }
 
 /**

@@ -38,7 +38,8 @@ Fruit::~Fruit() {
  * @return const sf::RectangleShape zwracany shape obiektu
  */
 const sf::RectangleShape Fruit::getShape() const {
-    return this->shape;
+    sf::RectangleShape result = getShapeTemplate<sf::RectangleShape>(this->shape);
+    return result;
 }
 
 /**
