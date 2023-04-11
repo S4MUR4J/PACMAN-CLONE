@@ -4,9 +4,9 @@
  * Funkcja odpowiadająca za inicjację podstawowych parametrów owocu, 
  * takich jak kolor, średnica, oraz pozycja
  * 
- * @param window - okno na, którym będzie owoc
- * @param x - pozycja w osi X owocu
- * @param y - pozycja w osi X owocu
+ * @param window okno na, którym będzie owoc
+ * @param x pozycja w osi X owocu
+ * @param y pozycja w osi X owocu
  */
 void Fruit::initShape(const sf::RenderWindow& window, float x, float y) {
     this->shape.setFillColor(sf::Color::White);
@@ -18,9 +18,9 @@ void Fruit::initShape(const sf::RenderWindow& window, float x, float y) {
  * Kontruktor obiektu owoca, wywołujący inicjację podstawowych
  * parametrów obiektu
  * 
- * @param window - okno na, którym będzie rysowany owoc
- * @param x - pozycja w osi X owocu
- * @param y - pozycja w osi X owocu
+ * @param window okno na, którym będzie rysowany owoc
+ * @param x pozycja w osi X owocu
+ * @param y pozycja w osi X owocu
  */
 Fruit::Fruit(const sf::RenderWindow& window, float x, float y) {
     this->initShape(window, x, y);
@@ -35,7 +35,7 @@ Fruit::~Fruit() {
 /**
  * Funkcja to getter shape'u tego obiektu
  * 
- * @return const sf::RectangleShape - zwracany shape obiektu
+ * @return const sf::RectangleShape zwracany shape obiektu
  */
 const sf::RectangleShape Fruit::getShape() const {
     return this->shape;
@@ -44,7 +44,7 @@ const sf::RectangleShape Fruit::getShape() const {
 /**
  * Funkcja odpowiadająca za rysowanie na ekranie owocu
  * 
- * @param target - ekran na którym będzie renderowany owoc
+ * @param target ekran na którym będzie renderowany owoc
  */
 void Fruit::render(sf::RenderTarget &target) {
     target.draw(this->shape);

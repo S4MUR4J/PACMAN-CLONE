@@ -86,8 +86,8 @@ Game::~Game() {
 /**
  * Funkcja ta to getter infromacji o ostanie gry
  * 
- * @return true - gra została skończona
- * @return false - gra nie została skończona
+ * @return true gra została skończona
+ * @return false gra nie została skończona
  */
 const bool Game::getEndGame() const {
     return this->endGame;
@@ -97,8 +97,8 @@ const bool Game::getEndGame() const {
  * Funkcja przekazuje informacje na temat stanu gry, czy jest w trakcie działania 
  * czy została właśnie ukończona przez przegranie lub zamknięcie okna
  * 
- * @return true - gra się toczy
- * @return false - gra została skończona
+ * @return true gra się toczy
+ * @return false gra została skończona
  */
 const bool Game::executing() const {
     return this->window->isOpen() && this->endGame == false;

@@ -24,8 +24,8 @@ void Pacman::initShapes() {
 /**
  * Konstruktor tworzący obiekt gracza
  * 
- * @param x - pozycja startowa gracza na osi X 
- * @param y - pozycja startowa gracza na osi X 
+ * @param x pozycja startowa gracza na osi X 
+ * @param y pozycja startowa gracza na osi X 
  */
 Pacman::Pacman(float x, float y) {
     this->shape.setPosition(x, y);
@@ -53,8 +53,8 @@ const sf::CircleShape & Pacman::getShape() const {
 /**
  * Funkcja jest getter'em informacji o interakcji z specjalnym owocem
  * 
- * @return true - nasz gracz ma boost spowodowanego zjedzeniem specjalnego owocu
- * @return false - nasz gracz nie ma boost'u czyli nie zjadł specjalnego owacu
+ * @return true nasz gracz ma boost spowodowanego zjedzeniem specjalnego owocu
+ * @return false nasz gracz nie ma boost'u czyli nie zjadł specjalnego owacu
  */
 bool Pacman::isBoosted()
 {
@@ -65,8 +65,8 @@ bool Pacman::isBoosted()
  * Funkcja daje nam informacje na temat możliwości zmiany kierunku spowodowana
  * miejscem położenia na gridzie. Jeśli nasz gracz znajduje się blisko zakrętu
  * 
- * @return true - gracz moze zmienić kierunek
- * @return false - gracz nie może zmienić kierunku
+ * @return true gracz moze zmienić kierunek
+ * @return false gracz nie może zmienić kierunku
  */
 bool Pacman::canChangeDir()
 {
@@ -189,7 +189,7 @@ void Pacman::boostTimer()
  * Funkcja ta przetrzymuje logikę aktywowania, dezaktywowania boost'u w zależności
  * od parametru. Tak samo ustawia timer jego działania
  * 
- * @param active - tu przy wywołaniu przekazujemy czy wyłączamy (false) czy włączamy boost (true)
+ * @param active tu przy wywołaniu przekazujemy czy wyłączamy (false) czy włączamy boost (true)
  */
 void Pacman::boost(bool active)
 {
@@ -208,7 +208,7 @@ void Pacman::boost(bool active)
  * Funkcja ta jeśli znajdujemy się na krawędzi mapy na osi X (mamy dwa takie tunele)
  * przenosi nas na druga stronę tunelu.
  * 
- * @param target - ekran po po którym porusza się obiekt
+ * @param target ekran po po którym porusza się obiekt
  */
 void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
     if (this->shape.getGlobalBounds().left <= 0.f) {   
@@ -222,7 +222,7 @@ void Pacman::updateTeleportOnEdge(const sf::RenderTarget *target) {
 /**
  * Aktualizacja całej logiki wywoływania funkcji w pętli programu
  * 
- * @param target - parametr potrzebny nam do zdobycia wielkości ekranu
+ * @param target parametr potrzebny nam do zdobycia wielkości ekranu
  */
 void Pacman::update(const sf::RenderTarget * target) {
     //std::cout << "Pos X: " << this->shape.getPosition().x << "Pos Y: " << this->shape.getPosition().y << std::endl;
@@ -235,7 +235,7 @@ void Pacman::update(const sf::RenderTarget * target) {
 /**
  * Funkcja drukuje nam obiekt tej klasy na ekranie
  * 
- * @param target - ekran na, którym drukujemy
+ * @param target ekran na, którym drukujemy
  */
 void Pacman::render(sf::RenderTarget * target) {
     target->draw(this->shape);
