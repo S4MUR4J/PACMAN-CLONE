@@ -22,6 +22,10 @@ class Ghost {
         bool feared;
         sf::Vector2f playerOrigin;
         bool collisionTbl[4];
+        int indexX;
+        int indexY;
+        int nextIndexX;
+        int nextIndexY;
 
         MoveDirection moveDir;
         void initVariables();
@@ -34,7 +38,7 @@ class Ghost {
         
         void changeDir();
         sf::Vector2f getPlayerOrigin();
-        sf::Vector2f setPlayerOrigin();
+        void nextPosition(MoveDirection moveDir);
         bool isFeared();
         void Fear(bool isOff);
         bool collision(float posX, float posY);

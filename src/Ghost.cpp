@@ -5,9 +5,13 @@
  * do rozpoczęcia działań na obiekcie
  */
 void Ghost::initVariables() {
-    this->movementSpeed = 1.f;
+    this->movementSpeed = 20.f;
     this->moveDir = STOP;
     this->feared = false;
+    this->indexX = floor(getPlayerOrigin().x / cellSize);
+    this->indexY = floor(getPlayerOrigin().y / cellSize);
+    this->nextIndexX = this->indexX;
+    this->nextIndexY = this->indexY;
 }
 
 /**
@@ -67,6 +71,11 @@ bool Ghost::isFeared()
     return this->feared;
 }
 
+/**
+ * Funkcja oblicza pozycje globalna ducha według środka i zwraca jej wartość
+ * 
+ * @return sf::Vector2f - wektor położenia środka obiektu
+*/
 sf::Vector2f Ghost::getPlayerOrigin()
 {
     float x = this->shape.getPosition().x + this->shape.getSize().x/2;
@@ -75,26 +84,67 @@ sf::Vector2f Ghost::getPlayerOrigin()
     return origin;
 }
 
-sf::Vector2f Ghost::setPlayerOrigin()
-{
-    sf::Vector2f origin = sf::Vector2f((getPlayerOrigin().x / cellSize), (getPlayerOrigin().y / cellSize));
-    origin = sf::Vector2f(origin.x * cellSize, origin.y * cellSize);
-    
-    this->shape.setPosition(origin);
+/**
+ * Funkcja sprawdza kolejną pozycję na gridzie i ustawia ją do zmiennej w
+ * celu kolejnych sprawdzeń w logice poruszania sie
+ * 
+ * @param movDir - aktualny kierunek poruszania się
+*/
+void Ghost::nextPosition(MoveDirection moveDir) {
+
+    switch(moveDir) {
+        case LEFT:
+            this->nextIndexX = this->indexX;
+            this->nextIndexX--;
+            this->nextIndexY = this->indexY;
+            break;
+        case RIGHT:
+            this->nextIndexX = this->indexX;
+            this->nextIndexX++;
+            this->nextIndexY = this->indexY;
+            break;
+        case TOP:
+            this->nextIndexY = this->indexY;
+            this->nextIndexY--;
+            this->nextIndexX = this->indexX;
+            break;
+        case BOTTOM:
+            this->nextIndexY = this->indexY;
+            this->nextIndexY++;
+            this->nextIndexX = this->indexX;
+            break;
+        default:
+            this->nextIndexX = this->indexX;
+            this->nextIndexY = this->indexY;
+            break;
+    }
 }
+
+/**
+ * Funkcja odpowiadająca za zmianę kierunku poruszania się w zależności od 
+ * wczytanego inputu z klawiatury
+*/
 
 void Ghost::changeDir()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        if(this->moveDir != RIGHT)
+            this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
         this->moveDir = LEFT;
     } 
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        if(this->moveDir != LEFT)
+            this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
         this->moveDir = RIGHT;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        if(this->moveDir != BOTTOM)
+            this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
         this->moveDir = TOP;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        if(this->moveDir != TOP)
+            this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
         this->moveDir = BOTTOM;
     }
 }
@@ -126,15 +176,22 @@ void Ghost::Fear(bool isOff)
  * @param target - ekran z którego uzyskujemy jego rozmiar
  */
 void Ghost::updateTeleportOnEdge(const sf::RenderTarget *target) {
-    if (this->shape.getGlobalBounds().left <= 0.f) {   
+    if (this->nextIndexX < 0 && this->indexX == 0) {   
         this->shape.setPosition(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top); 
     }
-    if (this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x + 0.1f) {
+    if (this->nextIndexX > 20 && this->indexX == 20) {
         this->shape.setPosition(0.1f, this->shape.getGlobalBounds().top);
     }
 }
 
-
+/**
+ * Funkcja sprawdza sąsiednie pola gridu w celu znalezienia kolizji ze ścianą
+ * 
+ * @param posX - pozycja ducha w osi X
+ * @param posY - pozycja ducha w osi Y
+ * @return true - występuje ściana dla podanego kierunku poruszania się
+ * @return false - nie występuje ściana dla podanego kierunku poruszania się
+*/
 bool Ghost::collision(float posX, float posY)
 {
     bool result = false;
@@ -144,45 +201,53 @@ bool Ghost::collision(float posX, float posY)
 
     switch(this->moveDir) {
         case LEFT:
-            if(map[gridY][gridX--] == 1) {
+            if(map[this->nextIndexY][this->nextIndexX] == 1 && 
+            abs(this->getPlayerOrigin().x - this->indexX * cellSize - cellSize/2) < 0.5f)
+            {
                 return true;
             }
             break;
         case RIGHT:
-            if(map[gridY][gridX++] == 1) {
+            if(map[this->nextIndexY][this->nextIndexX] == 1 && 
+                abs(this->getPlayerOrigin().x - this->indexX * cellSize - cellSize/2) < 0.5f)
+            {
                 return true;
             }
             break;
         case TOP:
-            if(map[gridY--][gridX] == 1) {
+            if(map[this->nextIndexY][this->nextIndexX] == 1 &&
+                abs(this->getPlayerOrigin().y - this->indexY * cellSize - cellSize/2) < 0.5f)
+            {
                 return true;
             }
             break;
         case BOTTOM:
-            if(map[gridY++][gridX] == 1) {
+            if(map[this->nextIndexY][this->nextIndexX] == 1 &&
+            abs(this->getPlayerOrigin().y - this->indexY * cellSize - cellSize/2) < 0.5f)
+            {
                 return true;
             }
             break;
-    }
-
-    // std::cout << gridX << " " << gridY << std::endl;
+    };
 
     return result;
 }
 
 /**
- * Funkcja ta posiada logikę poruszania sie ducha, który śledzi naszego gracza.
+ * Funkcja ta posiada logikę poruszania sie ducha, który porusza się po gridzie, może
+ * poruszać się tam gdzie wartość nie wynosi 1.
  * 
  * @param x - aktualne położenie gracza w osi X
  * @param y - aktualne położenie gracza w osi Y
  */
 void Ghost::moveGhost(float x, float y)
 {
-    sf::Vector2f position = getPlayerOrigin();
+    sf::Vector2f position = this->getPlayerOrigin();
     float ghostX = position.x;
     float ghostY = position.y;
+    this->indexX = static_cast<int>(floor((position.x)/ cellSize));
+    this->indexY = static_cast<int>(floor((position.y)/ cellSize));
 
-    // std::cout << ghostX << " " << ghostY << std::endl;
     changeDir();
     for (int i = 0; i < 4; i ++) {
         if(i == 0)
@@ -194,24 +259,11 @@ void Ghost::moveGhost(float x, float y)
         if(i == 3)
             this->collisionTbl[3] = collision(ghostX, ghostY + movementSpeed); // Bottom
     }
-    for (int i = 0; i < 4; i++) {
-        //std::cout << collisionTbl[i] << " ";
-    }
-    //std::cout << "\n";
 
     if (!this->feared) {
         this->shape.move(-this->movementSpeed, -this->movementSpeed);
         return;
     }
-
-    // if(this->moveDir != STOP)
-    //     setPlayerOrigin();
-
-    if(abs(getPlayerOrigin().x / cellSize - floor(getPlayerOrigin().x / cellSize) > 1.f) || 
-        abs(getPlayerOrigin().y / cellSize - floor(getPlayerOrigin().y / cellSize) > 1.f )) {
-        this->setPlayerOrigin();
-    }
-    
 
     if (this->moveDir == LEFT && this->collisionTbl[0] != true) {
         this->shape.move(-this->movementSpeed, 0.f);
@@ -224,8 +276,10 @@ void Ghost::moveGhost(float x, float y)
     }
     else if (this->moveDir == BOTTOM && this->collisionTbl[3] != true) {
         this->shape.move(0.f, this->movementSpeed);
+    } 
+    else {
+        this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
     }
-        
 }
 
 /**
@@ -238,6 +292,7 @@ void Ghost::moveGhost(float x, float y)
 void Ghost::update(const sf::RenderTarget * target, float x, float y)
 {
     this->updateTeleportOnEdge(target);
+    this->nextPosition(this->moveDir);
     this->moveGhost(x, y);
 }
 
