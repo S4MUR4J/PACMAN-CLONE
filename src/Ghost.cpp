@@ -7,7 +7,7 @@
 void Ghost::initVariables() {
     this->movementSpeed = 20.f;
     this->moveDir = STOP;
-    this->feared = false;
+    this->effected = false;
     this->indexX = floor(getPlayerOrigin().x / cellSize);
     this->indexY = floor(getPlayerOrigin().y / cellSize);
     this->nextIndexX = this->indexX;
@@ -67,9 +67,9 @@ sf::RectangleShape Ghost::getShape()
  * @return true duch jest przerażony
  * @return false duch nie jest przerażony
  */
-bool Ghost::isFeared()
+bool Ghost::isEfected()
 {
-    return this->feared;
+    return this->effected;
 }
 
 /**
@@ -156,14 +156,14 @@ void Ghost::changeDir()
  * 
  * @param isOff parametr wykorzystywany do aktywacji i dezaaktywacji efektu przerażenia
  */
-void Ghost::Fear(bool isOff)
+void Ghost::Effect(bool isOff)
 {
     if(!isOff) {
-        this->feared = true;
+        this->effected = true;
         this->movementSpeed = 0.55f;
     }      
     else {
-        this->feared = false;
+        this->effected = false;
         this->movementSpeed = 0.1f;
     }
 
@@ -261,7 +261,7 @@ void Ghost::moveGhost(float x, float y)
             this->collisionTbl[3] = collision(ghostX, ghostY + movementSpeed); // Bottom
     }
 
-    if (!this->feared) {
+    if (!this->effected) {
         return;
     }
 

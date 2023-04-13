@@ -160,9 +160,9 @@ void Game::update() {
                                 this->ghosts[i].getShape().getPosition().x + ghosts[i].getShape().getSize().x/2,
                                 this->ghosts[i].getShape().getPosition().y + ghosts[i].getShape().getSize().y/2);
             if(this->pacman.isBoosted())
-                this->ghosts[i].Fear(true);
+                this->ghosts[i].Effect(true);
             if(!this->pacman.isBoosted())
-                this->ghosts[i].Fear(false);
+                this->ghosts[i].Effect(false);
         }
         this->updateCollision();
         this->manageEndGame();

@@ -19,7 +19,7 @@ class Ghost {
     private:
         sf::RectangleShape shape;
         float movementSpeed;
-        bool feared;
+        bool effected;
         sf::Vector2f playerOrigin;
         bool collisionTbl[4];
         int indexX;
@@ -40,8 +40,8 @@ class Ghost {
         void changeDir();
         sf::Vector2f getPlayerOrigin();
         void nextPosition(MoveDirection moveDir);
-        bool isFeared();
-        void Fear(bool isOff);
+        bool isEfected();
+        void Effect(bool isOff);
         bool collision(float posX, float posY);
         void moveGhost(float x, float y);
         void updateTeleportOnEdge(const sf::RenderTarget *target);
