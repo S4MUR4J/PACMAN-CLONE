@@ -15,7 +15,7 @@ void Game::initMapTiles()
 {
     for(int i = 0; i < mapHeight; i++) {
         for(int j = 0; j < mapWidth; j++) {
-            if (sketch[j][i] == 1)
+            if (map[j][i] == 1)
                 this->mapTiles.push_back(Map(*this->window, i * cellSize, j * cellSize));
         }
     }
@@ -28,11 +28,11 @@ void Game::initMapTiles()
 void Game::initFruits() {
     for(int i = 0; i < mapHeight; i++) {
         for(int j = 0; j < mapWidth; j++) {
-            if (sketch[j][i] == 0)
+            if (map[j][i] == 0)
                 this->fruits.push_back(Fruit(*this->window, i * cellSize + 20.f, j * cellSize + 20.f));
-            if (sketch[j][i] == 3)
+            if (map[j][i] == 3)
                 this->specialFruits.push_back(SpecialFruit(*this->window, i * cellSize + 20.f, j * cellSize + 20.f));
-            if(sketch[j][i] == 7)
+            if(map[j][i] == 7)
                 this->ghosts.push_back(Ghost(*this->window, i * cellSize + 14.f, j * cellSize + 14.f));
         }
     }
