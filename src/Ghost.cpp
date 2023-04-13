@@ -12,6 +12,7 @@ void Ghost::initVariables() {
     this->indexY = floor(getPlayerOrigin().y / cellSize);
     this->nextIndexX = this->indexX;
     this->nextIndexY = this->indexY;
+    this->offset = this->shape.getSize().x/2;
 }
 
 /**
@@ -78,8 +79,8 @@ bool Ghost::isFeared()
 */
 sf::Vector2f Ghost::getPlayerOrigin()
 {
-    float x = this->shape.getPosition().x + this->shape.getSize().x/2;
-    float y = this->shape.getPosition().y + this->shape.getSize().y/2;
+    float x = this->shape.getPosition().x + cellSize/4;
+    float y = this->shape.getPosition().y + cellSize/4;
     sf::Vector2f origin(x, y);
     return origin;
 }
@@ -129,22 +130,22 @@ void Ghost::changeDir()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         if(this->moveDir != RIGHT)
-            this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
+            this->shape.setPosition(this->indexX * cellSize + this->offset, this->indexY * cellSize + this->offset);
         this->moveDir = LEFT;
     } 
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         if(this->moveDir != LEFT)
-            this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
+            this->shape.setPosition(this->indexX * cellSize + this->offset, this->indexY * cellSize + this->offset);
         this->moveDir = RIGHT;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         if(this->moveDir != BOTTOM)
-            this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
+            this->shape.setPosition(this->indexX * cellSize + this->offset, this->indexY * cellSize + this->offset);
         this->moveDir = TOP;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         if(this->moveDir != TOP)
-            this->shape.setPosition(this->indexX * cellSize + 12.f, this->indexY * cellSize + 12.f);
+            this->shape.setPosition(this->indexX * cellSize + this->offset, this->indexY * cellSize + this->offset);
         this->moveDir = BOTTOM;
     }
 }

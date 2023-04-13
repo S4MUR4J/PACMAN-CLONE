@@ -26,6 +26,7 @@ class Ghost {
         int indexY;
         int nextIndexX;
         int nextIndexY;
+        float offset;
 
         MoveDirection moveDir;
         void initVariables();
