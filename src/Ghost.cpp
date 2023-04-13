@@ -124,6 +124,12 @@ void Ghost::nextPosition(MoveDirection moveDir) {
 /**
  * Funkcja odpowiadająca za zmianę kierunku poruszania się w zależności od 
  * wczytanego inputu z klawiatury
+ * 
+ * @param left przycisk do poruszania sie w lewo
+ * @param right przycisk do poruszania sie w prawo
+ * @param down przycisk do poruszania sie w dół
+ * @param top przycisk do poruszania sie w gore
+ * @param offset przesunięcie postaci
 */
 
 void Ghost::changeDir(sf::Keyboard::Key left, sf::Keyboard::Key right,
