@@ -126,26 +126,23 @@ void Ghost::nextPosition(MoveDirection moveDir) {
  * wczytanego inputu z klawiatury
 */
 
-void Ghost::changeDir()
+void Ghost::changeDir(sf::Keyboard::Key left, sf::Keyboard::Key right,
+                         sf::Keyboard::Key top, sf::Keyboard::Key down, float offset)
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        if(this->moveDir != RIGHT)
-            this->shape.setPosition(this->indexX * cellSize + this->offset, this->indexY * cellSize + this->offset);
+    if (sf::Keyboard::isKeyPressed(left)) {
+        this->shape.setPosition(this->indexX * cellSize + offset, this->indexY * cellSize + offset);
         this->moveDir = LEFT;
     } 
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        if(this->moveDir != LEFT)
-            this->shape.setPosition(this->indexX * cellSize + this->offset, this->indexY * cellSize + this->offset);
+    else if (sf::Keyboard::isKeyPressed(right)) {
+        this->shape.setPosition(this->indexX * cellSize + offset, this->indexY * cellSize + offset);
         this->moveDir = RIGHT;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        if(this->moveDir != BOTTOM)
-            this->shape.setPosition(this->indexX * cellSize + this->offset, this->indexY * cellSize + this->offset);
+    else if (sf::Keyboard::isKeyPressed(top)) {
+        this->shape.setPosition(this->indexX * cellSize + offset, this->indexY * cellSize + offset);
         this->moveDir = TOP;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        if(this->moveDir != TOP)
-            this->shape.setPosition(this->indexX * cellSize + this->offset, this->indexY * cellSize + this->offset);
+    else if (sf::Keyboard::isKeyPressed(down)) {
+        this->shape.setPosition(this->indexX * cellSize + offset, this->indexY * cellSize + offset);
         this->moveDir = BOTTOM;
     }
 }
@@ -241,7 +238,7 @@ bool Ghost::collision(float posX, float posY)
  * @param x aktualne położenie gracza w osi X
  * @param y aktualne położenie gracza w osi Y
  */
-void Ghost::moveGhost(float x, float y)
+void Ghost::updateInput(float x, float y)
 {
     sf::Vector2f position = this->getPlayerOrigin();
     float ghostX = position.x;
@@ -249,7 +246,7 @@ void Ghost::moveGhost(float x, float y)
     this->indexX = static_cast<int>(floor((position.x)/ cellSize));
     this->indexY = static_cast<int>(floor((position.y)/ cellSize));
 
-    changeDir();
+    changeDir(sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::W, sf::Keyboard::S, this->offset);
     for (int i = 0; i < 4; i ++) {
         if(i == 0)
             this->collisionTbl[0] = collision(ghostX - movementSpeed, ghostY); // Left
@@ -293,7 +290,7 @@ void Ghost::update(const sf::RenderTarget * target, float x, float y)
 {
     this->updateTeleportOnEdge(target);
     this->nextPosition(this->moveDir);
-    this->moveGhost(x, y);
+    this->updateInput(x, y);
 }
 
 /**

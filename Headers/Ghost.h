@@ -15,6 +15,7 @@
  * Klasa ta przechowuje dane oraz całą logikę działania przeciwników (tzw. duchów). Zmienia dane
  * na temat obiektu, rysuje go oraz odpowiada za poruszanie się.
  */
+
 class Ghost {
     private:
         sf::RectangleShape shape;
@@ -35,16 +36,17 @@ class Ghost {
         Ghost(const sf::RenderWindow& window, float x, float y);
         virtual ~Ghost();
 
-        sf::RectangleShape getShape();
+        virtual sf::RectangleShape getShape();
         
-        void changeDir();
+        void changeDir(sf::Keyboard::Key left, sf::Keyboard::Key right,
+                        sf::Keyboard::Key top, sf::Keyboard::Key down, float offset);
         sf::Vector2f getPlayerOrigin();
         void nextPosition(MoveDirection moveDir);
         bool isEfected();
-        void Effect(bool isOff);
+        virtual void Effect(bool isOff);
         bool collision(float posX, float posY);
-        void moveGhost(float x, float y);
+        virtual void updateInput(float x, float y);
         void updateTeleportOnEdge(const sf::RenderTarget *target);
-        void update(const sf::RenderTarget * target, float x, float y);
-        void render(sf::RenderTarget *target);
+        virtual void update(const sf::RenderTarget * target, float x, float y);
+        virtual void render(sf::RenderTarget *target);
 };
